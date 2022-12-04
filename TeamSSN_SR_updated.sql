@@ -6,9 +6,10 @@ select * from available_plans;
 select * from department;
 select * from employee_details;
 select * from transactions;
-select * from users;
+select * from user_details;
 select * from user_plans;
 select * from payments;
+
 
  
  
@@ -246,7 +247,7 @@ CREATE SEQUENCE transaction_seq         -- creating sequences for transactions t
 
 
 
-CREATE TABLE users ( 
+CREATE TABLE user_details ( 
 
 USER_ID NUMBER(5,0) default userid_seq.nextval primary key, 
 
@@ -275,22 +276,6 @@ USER_STATUS VARCHAR2(20 BYTE) not null
 ); 
 
 
---Creating user_plans table: 
-
- 
-
-create table user_plans( 
-
-user_id number(5) references users(user_id), 
-
-plan_id number(10) references available_plans(plan_id), 
-
-plan_start_date date NOT NULL, 
-
-plan_feedback varchar2(30) 
-
-); 
-
 
 --Creating available_plans table: 
 
@@ -312,15 +297,49 @@ VALIDITY NUMBER(10) NOT NULL
 
 ); 
 
+
+--Creating user_plans table: 
+
  
+
+create table user_plans( 
+
+user_id number(5) references user_details(user_id), 
+
+plan_id number(10) references available_plans(plan_id), 
+
+plan_start_date date NOT NULL, 
+
+plan_feedback varchar2(30) 
+
+); 
+
+ 
+
+
+--Creating Department Table: 
+
+create table department(  
+
+dept_id number default deptid_seq.nextval primary key ,   
+
+dept_name varchar2(20) not null,  
+
+dept_email varchar2(25) not null, 
+
+dept_phone_number number unique  
+
+); 
+
 
 --Creating employee details table: 
 
- 
 
 create table employee_details( 
 
 emp_id number default empid_seq.nextval primary key , 
+
+--dept_id number references department(dept_id),
 
 emp_first_name varchar2(20) not null, 
 
@@ -334,11 +353,9 @@ emp_state varchar2(20) not null,
 
 emp_zipcode varchar2(5) not null, 
 
-emp_country varchar2(20) not null, 
-
 emp_title varchar2(20), 
 
-emp_level varchar2(20), 
+--emp_level varchar2(20), 
 
 emp_phone number(10) unique, 
 
@@ -348,21 +365,6 @@ emp_email varchar2(35)unique
 
  
 
---Creating Department Table: 
-
-create table department(  
-
-dept_id number default deptid_seq.nextval primary key , 
-
-emp_id number references employee_details(emp_id),  
-
-dept_name varchar2(20) not null,  
-
-dept_email varchar2(25) not null, 
-
-dept_phone_number number unique  
-
-); 
 
 --Creating Payments Table: 
 
@@ -372,7 +374,7 @@ create table payments(
 
 payment_id number default payment_seq.nextval  primary key, 
 
-user_id number(5) references users(user_id), 
+user_id number(5) references user_details(user_id), 
 
 account_number number not null, 
 
@@ -396,7 +398,7 @@ create table transactions(
 
 transaction_id number default transaction_seq.nextval primary key, 
 
-user_id number references users(user_id), 
+user_id number references user_details(user_id), 
 
 transaction_type varchar2(20) not null, 
 
@@ -418,6 +420,184 @@ destination_number number(10)
 
 --Creating Procedures to enter the sample data: 
 
+ 
+--Creating the procedure for Users Table:
+ 
+ 
+
+create or replace procedure users_insert 
+
+(p_user_id IN USER_DETAILS.USER_ID%TYPE, 
+
+p_user_fname IN USER_DETAILS.USER_FIRST_NAME%TYPE, 
+
+p_user_lname IN USER_DETAILS.USER_LAST_NAME%TYPE, 
+
+p_street IN USER_DETAILS.USER_STREET%TYPE,
+
+p_city IN USER_DETAILS.USER_CITY%TYPE, 
+
+p_state IN USER_DETAILS.USER_STATE%TYPE, 
+
+p_zipcode IN USER_DETAILS.USER_ZIPCODE%TYPE,
+
+p_iden_type IN USER_DETAILS.IDENTIFICATION_TYPE%TYPE, 
+
+p_iden_num IN USER_DETAILS.IDENTIFICATION_NUMBER%TYPE, 
+
+p_user_phone IN USER_DETAILS.USER_PHONE%TYPE,
+
+p_min_bal IN USER_DETAILS.MIN_BALANCE%TYPE, 
+
+p_user_status IN USER_DETAILS.USER_STATUS%TYPE
+
+) 
+
+IS 
+
+BEGIN 
+
+INSERT INTO  USER_DETAILS VALUES (p_user_id, p_user_fname, p_user_lname, p_street, p_city, p_state, p_zipcode, p_iden_type, p_iden_num, p_user_phone, p_min_bal, p_user_status); 
+
+DBMS_OUTPUT.PUT_LINE('User added.'); 
+
+END; 
+
+ 
+
+--Creating procedure for AVAILABLE_PLANS Table: 
+
+
+create or replace procedure available_plans_insert 
+
+(p_plan_id IN AVAILABLE_PLANS.PLAN_ID%TYPE, 
+
+p_plan_type IN AVAILABLE_PLANS.PLAN_TYPE%TYPE, 
+
+p_plan_cost IN AVAILABLE_PLANS.PLAN_COST%TYPE, 
+
+p_avail_sms IN AVAILABLE_PLANS.AVAILABLE_SMS%TYPE,
+
+p_avail_calls IN AVAILABLE_PLANS.AVAILABLE_CALLS%TYPE,
+
+p_avail_data IN AVAILABLE_PLANS.AVAILABLE_DATA%TYPE,
+
+p_validity IN AVAILABLE_PLANS.VALIDITY%TYPE) 
+
+IS 
+
+BEGIN 
+
+INSERT INTO  AVAILABLE_PLANS VALUES (p_plan_id, p_plan_type, p_plan_cost, p_avail_sms, p_avail_calls, p_avail_data, p_validity); 
+
+DBMS_OUTPUT.PUT_LINE('PLAN added.'); 
+
+END; 
+
+  
+ 
+
+
+--Creating procedure for USER_PLANS Table: 
+
+ 
+
+create or replace procedure userplans_insert 
+
+(puser_id IN USER_PLANS.USER_ID%TYPE, 
+
+pplan_id IN USER_PLANS.PLAN_ID%TYPE, 
+
+pstart IN USER_PLANS.PLAN_START_DATE%TYPE, 
+
+pfeedback IN USER_PLANS.PLAN_FEEDBACK%TYPE) 
+
+IS 
+
+BEGIN 
+
+INSERT INTO  USER_PLANS VALUES (puser_id,pplan_id,pstart,pfeedback); 
+
+DBMS_OUTPUT.PUT_LINE('USER_PLANS added.'); 
+
+END; 
+
+ 
+ 
+
+--Creating the procedure for Department Table :  
+
+
+create or replace procedure department_insert 
+
+(p_dept_id IN DEPARTMENT.DEPT_ID%TYPE, 
+
+p_dept_name IN DEPARTMENT.DEPT_NAME%TYPE, 
+
+p_dept_email IN DEPARTMENT.DEPT_EMAIL%TYPE, 
+
+p_dept_phone IN DEPARTMENT.DEPT_PHONE_NUMBER%TYPE) 
+
+IS 
+
+BEGIN 
+
+INSERT INTO  department VALUES (p_dept_id, p_dept_name, p_dept_email, p_dept_phone); 
+
+DBMS_OUTPUT.PUT_LINE('Department added.'); 
+
+END; 
+
+ 
+
+ 
+--Creating the procedure for Employee Table 
+
+
+create or replace procedure employees_insert 
+
+(p_emp_id IN EMPLOYEE_DETAILS.EMP_ID%TYPE, 
+
+--p_dept_id IN EMPLOYEE_DETAILS.DEPT_ID%TYPE, 
+
+p_emp_fname IN EMPLOYEE_DETAILS.EMP_FIRST_NAME%TYPE, 
+
+p_emp_lname IN EMPLOYEE_DETAILS.EMP_LAST_NAME%TYPE, 
+
+p_emp_street IN EMPLOYEE_DETAILS.EMP_STREET%TYPE,
+
+p_emp_city IN EMPLOYEE_DETAILS.EMP_CITY%TYPE, 
+
+p_emp_state IN EMPLOYEE_DETAILS.EMP_STATE%TYPE, 
+
+p_emp_zipcode IN EMPLOYEE_DETAILS.EMP_ZIPCODE%TYPE,
+
+p_emp_title IN EMPLOYEE_DETAILS.EMP_TITLE%TYPE, 
+
+--p_emp_level IN EMPLOYEE_DETAILS.EMP_LEVEL%TYPE, 
+
+p_emp_phone IN EMPLOYEE_DETAILS.EMP_PHONE%TYPE,
+
+p_emp_email IN EMPLOYEE_DETAILS.EMP_EMAIL%TYPE
+
+) 
+
+IS 
+
+BEGIN 
+
+INSERT INTO  EMPLOYEE_DETAILS VALUES (p_emp_id, p_emp_fname, p_emp_lname, p_emp_street, p_emp_city, p_emp_state, p_emp_zipcode, p_emp_title, p_emp_phone, p_emp_email); 
+
+DBMS_OUTPUT.PUT_LINE('Employee added.'); 
+
+END; 
+
+ 
+
+
+ 
+
+ 
  
 
 --Creating the procedure for Payments Table: 
@@ -481,153 +661,49 @@ DBMS_OUTPUT.PUT_LINE('Transaction added.');
 END; 
 
  
-
---Creating procedure for USER_PLANS Table: 
-
  
-
-create or replace procedure userplans_insert 
-
-(puser_id IN USER_PLANS.USER_ID%TYPE, 
-
-pplan_id IN USER_PLANS.PLAN_ID%TYPE, 
-
-pstart IN USER_PLANS.PLAN_START_DATE%TYPE, 
-
-pfeedback IN USER_PLANS.PLAN_FEEDBACK%TYPE) 
-
-IS 
-
-BEGIN 
-
-INSERT INTO  USER_PLANS VALUES (puser_id,pplan_id,pstart,pfeedback); 
-
-DBMS_OUTPUT.PUT_LINE('USER_PLANS added.'); 
-
-END; 
-
  
-
 --Inserting the data into USERS Table: 
 
-  
+execute users_insert(15382, 'elizabeth', 'rachel', '56 victoria street', 'hurley', 'mississippi', '02178', 'SSN',799400669,9635383643, 1, 'active');  
 
+execute users_insert(19873, 'Brian', 'Carlson', '137 Coal Road', 'Philadelphia', 'Pennsylvania', '28716', 'SSN',975974574,5363926482, 2.3, 'active'); 
 
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode, IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER,user_phone, min_balance, user_status)  
+execute users_insert(10034, 'MIKE', 'ROSS', '46 WILSON LANE', 'DALLAS', 'TEXAS', '53829', 'SSN',712591346,4385640576, 32.2, 'active');   
 
-values (15382, 'elizabeth', 'rachel', '56 victoria street', 'hurley', 'mississippi', '02178', 'SSN',799400669,9635383643, 1, 'active');  
+execute users_insert(17644, 'Adam', 'Sandler', '257 Otter Avenue', 'Houstan', 'Texas', '43672', 'SSN',237904321,9045385530, 34.7, 'active'); 
 
-  
+execute users_insert(13572, 'tessa', 'thompson', '75 fleming way', 'delaware', 'ohio', '02384', 'SSN',393890269,8452956338, 0.0, 'active');  
 
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode,IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER, user_phone, min_balance, user_status)  
+execute users_insert(15380, 'andrew', 'garfield', '825 lucy lane', 'boston', 'massachusetts', '56227','SSN',708601148, 4385638359, 12.64, 'active');  
 
-values (19873, 'Brian', 'Carlson', '137 Coal Road', 'Philadelphia', 'Pennsylvania', '28716', 'SSN',975974574,5363926482, 2.3, 'active'); 
+execute users_insert(14278, 'EMMA', 'STONE', '973 ESSEX LANE', 'TUCSON', 'ARIZONA', '73584','SSN',613921592 ,5392547606, 9.23, 'active');  
 
-  
+execute users_insert(15723, 'Taylor', 'Swift', '13 Oak Way', 'Burlington', 'Vermont', '15372','SSN', 225194478,6784668354, 0.0, 'active');  
 
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode,IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER, user_phone, min_balance, user_status)  
+execute users_insert(17936, 'TOM', 'HOLLAND', '96 COLLEGE AVENUE', 'PITTSBURGH', 'PENNSYLVANIA', '43672','SSN',226749374, 8564739254, 19.43, 'active');  
 
-values (10034, 'MIKE', 'ROSS', '46 WILSON LANE', 'DALLAS', 'TEXAS', '53829', 'SSN',712591346,4385640576, 32.2, 'active'); 
+execute users_insert(10238, 'Zendaya', 'Thomas', '867 Clarklent Street', 'Highland', 'Kansas', '34527','SSN',166147527 ,3345604563, 0.0, 'active');  
 
-  
+execute users_insert(15572, 'Cole', 'Sprouse', '12 Shadow Drive', 'Columbus', 'Ohio', '57893', 'SSN',824244928,6443856398, 42.3, 'active');  
 
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode,IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER, user_phone, min_balance, user_status)  
+execute users_insert(10327, 'CHANDLER', 'BING', '8786 EDINGTON LANE', 'SPRINGFIELD', 'MASSACHUSETTS', '36642','SSN', 159380974,3495540648, 53.42, 'active');  
 
-values (17644, 'Adam', 'Sandler', '257 Otter Avenue', 'Houstan', 'Texas', '43672', 'SSN',237904321,9045385530, 34.7, 'active'); 
+execute users_insert(13827, 'monica', 'geller', '86 marine drive', 'Portersville', 'Pennsylvania', '56278','SSN',599373475 ,7659335473, 13.54, 'active');  
 
-  
+execute users_insert(14217, 'Rachel', 'Green', '890 Patch Road', 'Washington', 'Washington DC', '97923', 'SSN',691359918,7583695638, 0.0, 'active');  
 
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode,IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER, user_phone, min_balance, user_status) 
+execute users_insert(12673, 'HARVEY', 'SPECTRE', '972 VITERO WAY', 'SACRAMENTO', 'CALIFORNIA', '96483', 'SSN',771857266,5374749547, 22.78, 'active');    
 
-values (13572, 'tessa', 'thompson', '75 fleming way', 'delaware', 'ohio', '02384', 'SSN',393890269,8452956338, 0.0, 'suspended');  
+execute users_insert(12983, 'michael', 'scott', '57 terry lane', 'miami', 'florida', '65723', 'SSN',281099656,4874538563, 67.43, 'active');  
 
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode,IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER, user_phone, min_balance, user_status)  
+execute users_insert(13083, 'JIM', 'PARSON', '90 BARNES STREET', 'INDIANAPOLIS', 'INDIANA', '76742', 'SSN',853200975,6479479025, 44.94, 'active');  
 
-values (15380, 'andrew', 'garfield', '825 lucy lane', 'boston', 'massachusetts', '56227','SSN',708601148, 4385638359, 12.64, 'active');  
+execute users_insert(13934, 'Pam', 'Beasly', '123 Jett Lane', 'Seattle', 'Washington', '34878', 'SSN',378868816,5382945638, 0.0, 'active');  
 
-  
+execute users_insert(13826, 'selena', 'thomas', '6538 woodrow way', 'weston', 'nebraska', '09953','SSN',506388146, 4372846672, 57.42, 'active');  
 
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode,IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER, user_phone, min_balance, user_status)  
-
-values (14278, 'EMMA', 'STONE', '973 ESSEX LANE', 'TUCSON', 'ARIZONA', '73584','SSN',613921592 ,5392547606, 9.23, 'active');  
-
-  
-
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode,IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER, user_phone, min_balance, user_status)  
-
-values (15723, 'Taylor', 'Swift', '13 Oak Way', 'Burlington', 'Vermont', '15372','SSN', 225194478,6784668354, 0.0, 'deactivated');  
-
-  
-
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode,IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER, user_phone, min_balance, user_status)  
-
-values (17936, 'TOM', 'HOLLAND', '96 COLLEGE AVENUE', 'PITTSBURGH', 'PENNSYLVANIA', '43672','SSN',226749374, 8564739254, 19.43, 'active');  
-
-  
-
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode,IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER, user_phone, min_balance, user_status)  
-
-values (10238, 'Zendaya', 'Thomas', '867 Clarklent Street', 'Highland', 'Kansas', '34527','SSN',166147527 ,3345604563, 0.0, 'deactivated');  
-
-  
-
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode,IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER, user_phone, min_balance, user_status)  
-
-values (15572, 'Cole', 'Sprouse', '12 Shadow Drive', 'Columbus', 'Ohio', '57893', 'SSN',824244928,6443856398, 42.3, 'active');  
-
-  
-
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode, IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER,user_phone, min_balance, user_status)  
-
-values (10327, 'CHANDLER', 'BING', '8786 EDINGTON LANE', 'SPRINGFIELD', 'MASSACHUSETTS', '36642','SSN', 159380974,3495540648, 53.42, 'active');  
-
-  
-
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode,IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER, user_phone, min_balance, user_status)  
-
-values (13827, 'monica', 'geller', '86 marine drive', 'Portersville', 'Pennsylvania', '56278','SSN',599373475 ,7659335473, 13.54, 'active');  
-
-  
-
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode,IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER, user_phone, min_balance, user_status)  
-
-values (14217, 'Rachel', 'Green', '890 Patch Road', 'Washington', 'Washington DC', '97923', 'SSN',691359918,7583695638, 0.0, 'suspended');  
-
-  
-
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode,IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER, user_phone, min_balance, user_status)  
-
-values (12673, 'HARVEY', 'SPECTRE', '972 VITERO WAY', 'SACRAMENTO', 'CALIFORNIA', '96483', 'SSN',771857266,5374749547, 22.78, 'active');  
-
-  
-
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode, IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER,user_phone, min_balance, user_status)  
-
-values (12983, 'michael', 'scott', '57 terry lane', 'miami', 'florida', '65723', 'SSN',281099656,4874538563, 67.43, 'active');  
-
-  
-
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode,IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER, user_phone, min_balance, user_status)  
-
-values (13083, 'JIM', 'PARSON', '90 BARNES STREET', 'INDIANAPOLIS', 'INDIANA', '76742', 'SSN',853200975,6479479025, 44.94, 'active');  
-
-  
-
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode, IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER,user_phone, min_balance, user_status)  
-
-values (13934, 'Pam', 'Beasly', '123 Jett Lane', 'Seattle', 'Washington', '34878', 'SSN',378868816,5382945638, 0.0, 'suspended');  
-
-  
-
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode,IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER, user_phone, min_balance, user_status)  
-
-values (13826, 'selena', 'thomas', '6538 woodrow way', 'weston', 'nebraska', '09953','SSN',506388146, 4372846672, 57.42, 'active');  
-
-  
-
-insert into users(user_id, user_first_name, user_last_name, user_street, user_city, user_state, user_zipcode,IDENTIFICATION_TYPE, IDENTIFICATION_NUMBER, user_phone, min_balance, user_status)  
-
-values (19874, 'LANA', 'SCOTT', '994 VIRGIL STREET', 'BANGOR', 'MAINE', '19808', 'SSN',974391272,8564365788, 17.45, 'active'); 
+execute users_insert(19874, 'LANA', 'SCOTT', '994 VIRGIL STREET', 'BANGOR', 'MAINE', '19808', 'SSN',974391272,8564365788, 17.45, 'active'); 
 
  
 
@@ -635,36 +711,35 @@ values (19874, 'LANA', 'SCOTT', '994 VIRGIL STREET', 'BANGOR', 'MAINE', '19808',
 
  
 
+execute available_plans_insert(1, 'prepaid', 5, 100, 100, 2, 1); 
 
-insert into available_plans(plan_id, plan_type, plan_cost, available_sms, available_calls, available_data, validity) values(1, 'prepaid', 5, 100, 100, 2, 1); 
+execute available_plans_insert(2, 'prepaid', 10, 100, 175, 3, 7); 
 
-insert into available_plans(plan_id, plan_type, plan_cost, available_sms, available_calls, available_data, validity) values(2, 'prepaid', 10, 100, 175, 3, 7); 
+execute available_plans_insert(3, 'prepaid', 20, 100, -1, 5, 30); 
 
-insert into available_plans(plan_id, plan_type, plan_cost, available_sms, available_calls, available_data, validity) values(3, 'prepaid', 20, 100, -1, 5, 30); 
+execute available_plans_insert(4, 'prepaid', 50, 200, -1, 10, 90); 
 
-insert into available_plans(plan_id, plan_type, plan_cost, available_sms, available_calls, available_data, validity) values(4, 'prepaid', 50, 200, -1, 10, 90); 
+execute available_plans_insert(5, 'prepaid', 100, 300, -1, 20, 180); 
 
-insert into available_plans(plan_id, plan_type, plan_cost, available_sms, available_calls, available_data, validity) values(5, 'prepaid', 100, 300, -1, 20, 180); 
+execute available_plans_insert(6, 'prepaid', 175, 400, -1, 40, 240); 
 
-insert into available_plans(plan_id, plan_type, plan_cost, available_sms, available_calls, available_data, validity) values(6, 'prepaid', 175, 400, -1, 40, 240); 
+execute available_plans_insert(7, 'prepaid', 250, 800, -1, 80, 360); 
 
-insert into available_plans(plan_id, plan_type, plan_cost, available_sms, available_calls, available_data, validity) values(7, 'prepaid', 250, 800, -1, 80, 360); 
+execute available_plans_insert(8, 'prepaid', 275, -1, -1, 100, 360); 
 
-insert into available_plans(plan_id, plan_type, plan_cost, available_sms, available_calls, available_data, validity) values(8, 'prepaid', 275, -1, -1, 100, 360); 
+execute available_plans_insert(9, 'postpaid', 6, 100, 110, 2, 1); 
 
-insert into available_plans(plan_id, plan_type, plan_cost, available_sms, available_calls, available_data, validity) values(9, 'postpaid', 6, 100, 110, 2, 1); 
+execute available_plans_insert(10, 'postpaid', 12, 100, 185, 3, 7); 
 
-insert into available_plans(plan_id, plan_type, plan_cost, available_sms, available_calls, available_data, validity) values(10, 'postpaid', 12, 100, 185, 3, 7); 
+execute available_plans_insert(11, 'postpaid', 23, 100, -1, 5, 30); 
 
-insert into available_plans(plan_id, plan_type, plan_cost, available_sms, available_calls, available_data, validity) values(11, 'postpaid', 23, 100, -1, 5, 30); 
+execute available_plans_insert(12, 'postpaid', 55, 200, -1, 10, 90); 
 
-insert into available_plans(plan_id, plan_type, plan_cost, available_sms, available_calls, available_data, validity) values(12, 'postpaid', 55, 200, -1, 10, 90); 
+execute available_plans_insert(13, 'postpaid', 110, 300, -1, 20, 180); 
 
-insert into available_plans(plan_id, plan_type, plan_cost, available_sms, available_calls, available_data, validity) values(13, 'postpaid', 110, 300, -1, 20, 180); 
+execute available_plans_insert(14, 'postpaid', 180, 400, -1, 40, 240); 
 
-insert into available_plans(plan_id, plan_type, plan_cost, available_sms, available_calls, available_data, validity) values(14, 'postpaid', 180, 400, -1, 40, 240); 
-
-insert into available_plans(plan_id, plan_type, plan_cost, available_sms, available_calls, available_data, validity) values(15, 'postpaid', 270, 800, -1, 80, 360); 
+execute available_plans_insert(15, 'postpaid', 270, 800, -1, 80, 360); 
 
 
 
@@ -718,99 +793,69 @@ execute userplans_insert(13934,	7, TIMESTAMP '2022-11-19 19:05:37', 'extra data 
  
  
 execute userplans_insert(12673,	15, TIMESTAMP '2022-08-30 11:20:47', 'good data limit');
+
 execute userplans_insert(10327,	12, TIMESTAMP '2022-01-14 21:32:32', 'good');
+
 execute userplans_insert(19873,	6, TIMESTAMP '2022-09-17 03:43:31', 'average');
+
 execute userplans_insert(15572,	4, TIMESTAMP '2022-03-02 12:21:53', 'nice');
+
 execute userplans_insert(15572,	4, TIMESTAMP '2022-06-02 23:45:33', 'nice');
+
 execute userplans_insert(15572,	4, TIMESTAMP '2022-09-03 23:59:56', 'nice');
+
 execute userplans_insert(17644,	5, TIMESTAMP '2022-03-27 11:10:02', 'expensive');
+
 execute userplans_insert(14278,	10, TIMESTAMP '2022-09-10 12:14:31', 'good plan');
+
 execute userplans_insert(15723,	11, TIMESTAMP '2022-10-03 21:56:21', 'satisfied');
+
 execute userplans_insert(15723,	12, TIMESTAMP '2022-11-04 04:32:40', 'satisfied');
 
 
-
-
---Inserting the data into Employee details Table: 
-
-
-
-insert into employee_details(emp_id, emp_first_name, emp_last_name, emp_street, emp_city, emp_state, emp_zipcode, emp_country, emp_phone, emp_email) 
-
-values 
-
-(1003, 'Kevin', 'Swan', '38 Elm Street', 'Boston', 'Massachusets', '02160', 'United States', 8575274528, 'swan.ke@gmail.com'); 
-
-insert into employee_details(emp_id, emp_first_name, emp_last_name, emp_street, emp_city, emp_state, emp_zipcode, emp_country, emp_phone, emp_email) 
-
-values 
-
-(1264, 'andrew', 'stone', '73 main street', 'chicago', 'illinois', '60457', 'united states', 3127352828, 'stone.an@gmail.com'); 
-
-insert into employee_details(emp_id, emp_first_name, emp_last_name, emp_street, emp_city, emp_state, emp_zipcode, emp_country, emp_phone, emp_email) 
-
-values 
-
-(1453, 'MARK', 'ROBERT', '483 OAK STREET', 'SAN JOSE', 'CALIFORNIA', '21723', 'UNITED STATES', 4082181183, 'robert.ma@yahoo.com'); 
-
-insert into employee_details(emp_id, emp_first_name, emp_last_name, emp_street, emp_city, emp_state, emp_zipcode, emp_country, emp_phone, emp_email) 
-
-values 
-
-(1784, 'karen', 'matthews', '87 washington street', 'dallas', 'texas', '42749', 'united states', 8572945188, 'matthews.ka@outlook.com'); 
-
-insert into employee_details(emp_id, emp_first_name, emp_last_name, emp_street, emp_city, emp_state, emp_zipcode, emp_country, emp_phone, emp_email) 
-
-values 
-
-(1473, 'Johnny', 'hill', '83 park street', 'manhattan', 'New York', '83683', 'United States', 3327517900, 'hill.jo@gmail.com'); 
-
-insert into employee_details(emp_id, emp_first_name, emp_last_name, emp_street, emp_city, emp_state, emp_zipcode, emp_country, emp_phone, emp_email) 
-
-values 
-
-(1228, 'ISABELLA', 'MARK', '652 KOOTER LANE', 'CHARLOTTLE', 'NORTH CAROLINA', '32772', 'UNITED STATES', 2525682993, 'mark.is@yahoo.com'); 
-
-insert into employee_details(emp_id, emp_first_name, emp_last_name, emp_street, emp_city, emp_state, emp_zipcode, emp_country, emp_phone, emp_email) 
-
-values 
-
-(1984, 'jennifer', 'shule', '12 ersel street', 'reisterstown', 'maryland', '30028', 'united states', 3018992457, 'shule.je@gmail.com'); 
-
-insert into employee_details(emp_id, emp_first_name, emp_last_name, emp_street, emp_city, emp_state, emp_zipcode, emp_country, emp_phone, emp_email) 
-
-values 
-
-(1073, 'Andrew', 'Wilson', '3411 Cambridge Place', 'Dallas', 'Texas', '13831', 'United States', 7912835297, 'wilson.an@outlook.com'); 
-
-insert into employee_details(emp_id, emp_first_name, emp_last_name, emp_street, emp_city, emp_state, emp_zipcode, emp_country, emp_phone, emp_email) 
-
-values 
-
-(1835, 'SHAWN', 'HILL', '1367 FLYNN STREET', 'ROCKY RIVER', 'OHIO', '63929', 'UNITED STATES', 2569235739, 'hill.sh@yahoo.com'); 
-
-insert into employee_details(emp_id, emp_first_name, emp_last_name, emp_street, emp_city, emp_state, emp_zipcode, emp_country, emp_phone, emp_email) 
-
-values 
-
-(1648, 'Lisa', 'Kudrow', '1468 Warner Street', 'Kinston', 'North Carolina', '32581', 'United States', 7893568255, 'kudrow.li@gmail.com'); 
-
- 
 
 --Inserting the data into Department Table: 
 
  
 
-insert into department(dept_id, dept_name, dept_email) values (10, 'Accounting', 'accounting@gmail.com'); 
+execute department_insert(10, 'Accounting', 'accounting@gmail.com', 8754444111); 
 
-insert into department(dept_id, dept_name, dept_email) values (20, 'Marketing', 'marketing@gmail.com'); 
+execute department_insert(20, 'Marketing', 'marketing@gmail.com', 8754444222); 
 
-insert into department(dept_id, dept_name, dept_email) values (30, 'Technical', 'technical@gmail.com'); 
+execute department_insert(30, 'Technical', 'technical@gmail.com', 8754444333); 
 
-insert into department(dept_id, dept_name, dept_email) values (40, 'Customer Service', 'customerservice@gmail.com'); 
+execute department_insert(40, 'Customer Service', 'customerservice@gmail.com', 8754444444); 
 
-insert into department(dept_id, dept_name, dept_email) values (50, 'Management', 'management@gmail.com'); 
+execute department_insert(50, 'Management', 'management@gmail.com', 8754444555); 
 
+
+
+--Inserting the data into Employee details Table: 
+
+--not sure how many employees should be in each title and level
+--should add dept_id, level, title and remove country
+
+execute employees_insert(1003, 'Kevin', 'Swan', '38 Elm Street', 'Boston', 'Massachusets', '02160', 'United States', 8575274528, 'swan.ke@gmail.com'); 
+
+execute employees_insert(1264, 'andrew', 'stone', '73 main street', 'chicago', 'illinois', '60457', 'united states', 3127352828, 'stone.an@gmail.com'); 
+
+execute employees_insert(1453, 'MARK', 'ROBERT', '483 OAK STREET', 'SAN JOSE', 'CALIFORNIA', '21723', 'UNITED STATES', 4082181183, 'robert.ma@yahoo.com'); 
+
+execute employees_insert(1784, 'karen', 'matthews', '87 washington street', 'dallas', 'texas', '42749', 'united states', 8572945188, 'matthews.ka@outlook.com'); 
+
+execute employees_insert(1473, 'Johnny', 'hill', '83 park street', 'manhattan', 'New York', '83683', 'United States', 3327517900, 'hill.jo@gmail.com'); 
+
+execute employees_insert(1228, 'ISABELLA', 'MARK', '652 KOOTER LANE', 'CHARLOTTLE', 'NORTH CAROLINA', '32772', 'UNITED STATES', 2525682993, 'mark.is@yahoo.com'); 
+
+execute employees_insert(1984, 'jennifer', 'shule', '12 ersel street', 'reisterstown', 'maryland', '30028', 'united states', 3018992457, 'shule.je@gmail.com'); 
+
+execute employees_insert(1073, 'Andrew', 'Wilson', '3411 Cambridge Place', 'Dallas', 'Texas', '13831', 'United States', 7912835297, 'wilson.an@outlook.com'); 
+
+execute employees_insert(1835, 'SHAWN', 'HILL', '1367 FLYNN STREET', 'ROCKY RIVER', 'OHIO', '63929', 'UNITED STATES', 2569235739, 'hill.sh@yahoo.com'); 
+
+execute employees_insert(1648, 'Lisa', 'Kudrow', '1468 Warner Street', 'Kinston', 'North Carolina', '32581', 'United States', 7893568255, 'kudrow.li@gmail.com'); 
+
+ 
  
 
 --Inserting the data into Payments Table: 
@@ -839,7 +884,7 @@ execute payments_insert(1027,	15723,	704752642195,	511838562,	'JPMorgan Chase',	
 
 execute payments_insert(1028,	15723,	801276425953,	675442235,	'Bank of America',	'Success',TIMESTAMP '2022-11-04 04:32:40'); 
 
-execute payments_insert(1001,15382,1371971315883530,799400669,'Bank of America','Success',TIMESTAMP '2022-07-02 00:20:00'); 
+execute payments_insert(1001,	15382,	1371971315883530,	799400669,	'Bank of America',	'Success',TIMESTAMP '2022-07-02 00:20:00'); 
 
 execute payments_insert(1002,	19873,	7108664375894540,	799400669,	'JPMorgan Chase',	'Success',TIMESTAMP	'2022-01-28 06:13:17'); 
 
@@ -1271,6 +1316,20 @@ group by lower(u.user_state);
  
 
 select * from Region_based_revenue_view; 
+
+--change this according to the latest plan of the user
+--6th VIEW : User_transaction_history:  This view will give the history of all the transactions made by a particular user.
+ 
+
+CREATE OR REPLACE VIEW User_transaction_history(user_id, transaction_type, usage, destination_number, transaction_date) 
+
+as select user_id, transaction_type, usage, destination_number, date_time from transactions;
+
+
+
+select * from User_transaction_history where user_id=17644; 
+
+ 
 
  
 --dropping tables not working
