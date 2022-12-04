@@ -10,7 +10,6 @@ select * from user_details;
 select * from user_plans;
 select * from payments;
 
-
  
  
 --(1)	DDL SCRIPT:
@@ -173,11 +172,11 @@ Commit;
 
 CREATE SEQUENCE userid_seq      -- creating sequences for users table 
 
-  MINVALUE 1 
+  MINVALUE 10000
 
-  MAXVALUE 1000 
+  MAXVALUE 19999
 
-  START WITH 1 
+  START WITH 10000
 
   INCREMENT BY 1 
 
@@ -185,15 +184,29 @@ CREATE SEQUENCE userid_seq      -- creating sequences for users table
 
  
 
-CREATE SEQUENCE deptid_seq  -- creating sequences for department table 
+CREATE SEQUENCE avail_plans_seq      -- creating sequences for available_plans table 
 
-  MINVALUE 1 
+  MINVALUE 1
 
-  MAXVALUE 1000 
+  MAXVALUE 50
 
-  START WITH 1 
+  START WITH 1
 
   INCREMENT BY 1 
+
+  CACHE 20; 
+ 
+ 
+
+CREATE SEQUENCE deptid_seq  -- creating sequences for department table 
+
+  MINVALUE 10 
+
+  MAXVALUE 100 
+
+  START WITH 10 
+
+  INCREMENT BY 10
 
   CACHE 20; 
 
@@ -201,25 +214,24 @@ CREATE SEQUENCE deptid_seq  -- creating sequences for department table
 
 CREATE SEQUENCE empid_seq       -- creating sequences for employee_details table 
 
-  MINVALUE 1 
+  MINVALUE 50000 
 
-  MAXVALUE 1000 
+  MAXVALUE 59999 
 
-  START WITH 1 
+  START WITH 50000 
 
   INCREMENT BY 1 
 
   CACHE 20; 
 
- 
 
   CREATE SEQUENCE payment_seq             -- creating sequences for payments table 
 
-  MINVALUE 1 
+  MINVALUE 70000 
 
-  MAXVALUE 1000 
+  MAXVALUE 79999 
 
-  START WITH 1 
+  START WITH 70000 
 
   INCREMENT BY 1 
 
@@ -231,7 +243,7 @@ CREATE SEQUENCE transaction_seq         -- creating sequences for transactions t
 
   MINVALUE 1 
 
-  MAXVALUE 1000 
+  MAXVALUE 10000 
 
   START WITH 1 
 
@@ -244,7 +256,6 @@ CREATE SEQUENCE transaction_seq         -- creating sequences for transactions t
 --Creating the Tables using sequences: 
 
 --USERS TABLE: 
-
 
 
 CREATE TABLE user_details ( 
@@ -661,85 +672,85 @@ DBMS_OUTPUT.PUT_LINE('Transaction added.');
 END; 
 
  
- 
+
+
  
 --Inserting the data into USERS Table: 
 
-execute users_insert(15382, 'elizabeth', 'rachel', '56 victoria street', 'hurley', 'mississippi', '02178', 'SSN',799400669,9635383643, 1, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'elizabeth', 'rachel', '56 victoria street', 'hurley', 'mississippi', '02178', 'SSN',799400669,9635383643, 1, 'active');  
 
-execute users_insert(19873, 'Brian', 'Carlson', '137 Coal Road', 'Philadelphia', 'Pennsylvania', '28716', 'SSN',975974574,5363926482, 2.3, 'active'); 
+execute users_insert(userid_seq.NEXTVAL, 'Brian', 'Carlson', '137 Coal Road', 'Philadelphia', 'Pennsylvania', '28716', 'SSN',975974574,5363926482, 2.3, 'active'); 
 
-execute users_insert(10034, 'MIKE', 'ROSS', '46 WILSON LANE', 'DALLAS', 'TEXAS', '53829', 'SSN',712591346,4385640576, 32.2, 'active');   
+execute users_insert(userid_seq.NEXTVAL, 'MIKE', 'ROSS', '46 WILSON LANE', 'DALLAS', 'TEXAS', '53829', 'SSN',712591346,4385640576, 32.2, 'active');   
 
-execute users_insert(17644, 'Adam', 'Sandler', '257 Otter Avenue', 'Houstan', 'Texas', '43672', 'SSN',237904321,9045385530, 34.7, 'active'); 
+execute users_insert(userid_seq.NEXTVAL, 'Adam', 'Sandler', '257 Otter Avenue', 'Houstan', 'Texas', '43672', 'SSN',237904321,9045385530, 34.7, 'active'); 
 
-execute users_insert(13572, 'tessa', 'thompson', '75 fleming way', 'delaware', 'ohio', '02384', 'SSN',393890269,8452956338, 0.0, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'tessa', 'thompson', '75 fleming way', 'delaware', 'ohio', '02384', 'SSN',393890269,8452956338, 0.0, 'active');  
 
-execute users_insert(15380, 'andrew', 'garfield', '825 lucy lane', 'boston', 'massachusetts', '56227','SSN',708601148, 4385638359, 12.64, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'andrew', 'garfield', '825 lucy lane', 'boston', 'massachusetts', '56227','SSN',708601148, 4385638359, 12.64, 'active');  
 
-execute users_insert(14278, 'EMMA', 'STONE', '973 ESSEX LANE', 'TUCSON', 'ARIZONA', '73584','SSN',613921592 ,5392547606, 9.23, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'EMMA', 'STONE', '973 ESSEX LANE', 'TUCSON', 'ARIZONA', '73584','SSN',613921592 ,5392547606, 9.23, 'active');  
 
-execute users_insert(15723, 'Taylor', 'Swift', '13 Oak Way', 'Burlington', 'Vermont', '15372','SSN', 225194478,6784668354, 0.0, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'Taylor', 'Swift', '13 Oak Way', 'Burlington', 'Vermont', '15372','SSN', 225194478,6784668354, 0.0, 'active');  
 
-execute users_insert(17936, 'TOM', 'HOLLAND', '96 COLLEGE AVENUE', 'PITTSBURGH', 'PENNSYLVANIA', '43672','SSN',226749374, 8564739254, 19.43, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'TOM', 'HOLLAND', '96 COLLEGE AVENUE', 'PITTSBURGH', 'PENNSYLVANIA', '43672','SSN',226749374, 8564739254, 19.43, 'active');  
 
-execute users_insert(10238, 'Zendaya', 'Thomas', '867 Clarklent Street', 'Highland', 'Kansas', '34527','SSN',166147527 ,3345604563, 0.0, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'Zendaya', 'Thomas', '867 Clarklent Street', 'Highland', 'Kansas', '34527','SSN',166147527 ,3345604563, 0.0, 'active');  
 
-execute users_insert(15572, 'Cole', 'Sprouse', '12 Shadow Drive', 'Columbus', 'Ohio', '57893', 'SSN',824244928,6443856398, 42.3, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'Cole', 'Sprouse', '12 Shadow Drive', 'Columbus', 'Ohio', '57893', 'SSN',824244928,6443856398, 42.3, 'active');  
 
-execute users_insert(10327, 'CHANDLER', 'BING', '8786 EDINGTON LANE', 'SPRINGFIELD', 'MASSACHUSETTS', '36642','SSN', 159380974,3495540648, 53.42, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'CHANDLER', 'BING', '8786 EDINGTON LANE', 'SPRINGFIELD', 'MASSACHUSETTS', '36642','SSN', 159380974,3495540648, 53.42, 'active');  
 
-execute users_insert(13827, 'monica', 'geller', '86 marine drive', 'Portersville', 'Pennsylvania', '56278','SSN',599373475 ,7659335473, 13.54, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'monica', 'geller', '86 marine drive', 'Portersville', 'Pennsylvania', '56278','SSN',599373475 ,7659335473, 13.54, 'active');  
 
-execute users_insert(14217, 'Rachel', 'Green', '890 Patch Road', 'Washington', 'Washington DC', '97923', 'SSN',691359918,7583695638, 0.0, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'Rachel', 'Green', '890 Patch Road', 'Washington', 'Washington DC', '97923', 'SSN',691359918,7583695638, 0.0, 'active');  
 
-execute users_insert(12673, 'HARVEY', 'SPECTRE', '972 VITERO WAY', 'SACRAMENTO', 'CALIFORNIA', '96483', 'SSN',771857266,5374749547, 22.78, 'active');    
+execute users_insert(userid_seq.NEXTVAL, 'HARVEY', 'SPECTRE', '972 VITERO WAY', 'SACRAMENTO', 'CALIFORNIA', '96483', 'SSN',771857266,5374749547, 22.78, 'active');    
 
-execute users_insert(12983, 'michael', 'scott', '57 terry lane', 'miami', 'florida', '65723', 'SSN',281099656,4874538563, 67.43, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'michael', 'scott', '57 terry lane', 'miami', 'florida', '65723', 'SSN',281099656,4874538563, 67.43, 'active');  
 
-execute users_insert(13083, 'JIM', 'PARSON', '90 BARNES STREET', 'INDIANAPOLIS', 'INDIANA', '76742', 'SSN',853200975,6479479025, 44.94, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'JIM', 'PARSON', '90 BARNES STREET', 'INDIANAPOLIS', 'INDIANA', '76742', 'SSN',853200975,6479479025, 44.94, 'active');  
 
-execute users_insert(13934, 'Pam', 'Beasly', '123 Jett Lane', 'Seattle', 'Washington', '34878', 'SSN',378868816,5382945638, 0.0, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'Pam', 'Beasly', '123 Jett Lane', 'Seattle', 'Washington', '34878', 'SSN',378868816,5382945638, 0.0, 'active');  
 
-execute users_insert(13826, 'selena', 'thomas', '6538 woodrow way', 'weston', 'nebraska', '09953','SSN',506388146, 4372846672, 57.42, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'selena', 'thomas', '6538 woodrow way', 'weston', 'nebraska', '09953','SSN',506388146, 4372846672, 57.42, 'active');  
 
-execute users_insert(19874, 'LANA', 'SCOTT', '994 VIRGIL STREET', 'BANGOR', 'MAINE', '19808', 'SSN',974391272,8564365788, 17.45, 'active'); 
+execute users_insert(userid_seq.NEXTVAL, 'LANA', 'SCOTT', '994 VIRGIL STREET', 'BANGOR', 'MAINE', '19808', 'SSN',974391272,8564365788, 17.45, 'active'); 
 
  
 
 --Inserting the data into Available_plans: 
 
- 
 
-execute available_plans_insert(1, 'prepaid', 5, 100, 100, 2, 1); 
+execute available_plans_insert(avail_plans_seq.NEXTVAL, 'prepaid', 5, 100, 100, 2, 1); 
 
-execute available_plans_insert(2, 'prepaid', 10, 100, 175, 3, 7); 
+execute available_plans_insert(avail_plans_seq.NEXTVAL, 'prepaid', 10, 100, 175, 3, 7); 
 
-execute available_plans_insert(3, 'prepaid', 20, 100, -1, 5, 30); 
+execute available_plans_insert(avail_plans_seq.NEXTVAL, 'prepaid', 20, 100, -1, 5, 30); 
 
-execute available_plans_insert(4, 'prepaid', 50, 200, -1, 10, 90); 
+execute available_plans_insert(avail_plans_seq.NEXTVAL, 'prepaid', 50, 200, -1, 10, 90); 
 
-execute available_plans_insert(5, 'prepaid', 100, 300, -1, 20, 180); 
+execute available_plans_insert(avail_plans_seq.NEXTVAL, 'prepaid', 100, 300, -1, 20, 180); 
 
-execute available_plans_insert(6, 'prepaid', 175, 400, -1, 40, 240); 
+execute available_plans_insert(avail_plans_seq.NEXTVAL, 'prepaid', 175, 400, -1, 40, 240); 
 
-execute available_plans_insert(7, 'prepaid', 250, 800, -1, 80, 360); 
+execute available_plans_insert(avail_plans_seq.NEXTVAL, 'prepaid', 250, 800, -1, 80, 360); 
 
-execute available_plans_insert(8, 'prepaid', 275, -1, -1, 100, 360); 
+execute available_plans_insert(avail_plans_seq.NEXTVAL, 'prepaid', 275, -1, -1, 100, 360); 
 
-execute available_plans_insert(9, 'postpaid', 6, 100, 110, 2, 1); 
+execute available_plans_insert(avail_plans_seq.NEXTVAL, 'postpaid', 6, 100, 110, 2, 1); 
 
-execute available_plans_insert(10, 'postpaid', 12, 100, 185, 3, 7); 
+execute available_plans_insert(avail_plans_seq.NEXTVAL, 'postpaid', 12, 100, 185, 3, 7); 
 
-execute available_plans_insert(11, 'postpaid', 23, 100, -1, 5, 30); 
+execute available_plans_insert(avail_plans_seq.NEXTVAL, 'postpaid', 23, 100, -1, 5, 30); 
 
-execute available_plans_insert(12, 'postpaid', 55, 200, -1, 10, 90); 
+execute available_plans_insert(avail_plans_seq.NEXTVAL, 'postpaid', 55, 200, -1, 10, 90); 
 
-execute available_plans_insert(13, 'postpaid', 110, 300, -1, 20, 180); 
+execute available_plans_insert(avail_plans_seq.NEXTVAL, 'postpaid', 110, 300, -1, 20, 180); 
 
-execute available_plans_insert(14, 'postpaid', 180, 400, -1, 40, 240); 
+execute available_plans_insert(avail_plans_seq.NEXTVAL, 'postpaid', 180, 400, -1, 40, 240); 
 
-execute available_plans_insert(15, 'postpaid', 270, 800, -1, 80, 360); 
+execute available_plans_insert(avail_plans_seq.NEXTVAL, 'postpaid', 270, 800, -1, 80, 360); 
 
 
 
@@ -747,86 +758,85 @@ execute available_plans_insert(15, 'postpaid', 270, 800, -1, 80, 360);
 
 
 
-execute userplans_insert(15382,	15, TIMESTAMP '2021-12-22 00:08:53', 'plan is good'); 
+execute userplans_insert(10000,	15, TIMESTAMP '2021-12-22 00:08:53', 'plan is good'); 
 
-execute userplans_insert(12673,	14, TIMESTAMP '2021-12-30 01:18:21', 'insufficient data limit'); 
+execute userplans_insert(10014,	14, TIMESTAMP '2021-12-30 01:18:21', 'insufficient data limit'); 
 
-execute userplans_insert(10327,	9, TIMESTAMP '2022-01-12 02:36:12', 'best plan'); 
+execute userplans_insert(10011,	9, TIMESTAMP '2022-01-12 02:36:12', 'best plan'); 
 
-execute userplans_insert(19873,	6, TIMESTAMP '2022-01-17 03:43:31', 'average'); 
+execute userplans_insert(10001,	6, TIMESTAMP '2022-01-17 03:43:31', 'average'); 
 
-execute userplans_insert(15572,	3, TIMESTAMP '2022-02-02 04:32:32', 'could extend the validity'); 
+execute userplans_insert(10010,	3, TIMESTAMP '2022-02-02 04:32:32', 'could extend the validity'); 
 
-execute userplans_insert(13572,	4, TIMESTAMP '2022-03-13 05:12:45', 'data insifficient'); 
+execute userplans_insert(10004,	4, TIMESTAMP '2022-03-13 05:12:45', 'data insifficient'); 
 
-execute userplans_insert(17644,	2, TIMESTAMP '2022-03-20 06:56:49', 'call minutes were insufficient'); 
+execute userplans_insert(10003,	2, TIMESTAMP '2022-03-20 06:56:49', 'call minutes were insufficient'); 
 
-execute userplans_insert(14217,	5, TIMESTAMP '2022-04-15 07:32:12', 'very good'); 
+execute userplans_insert(10013,	5, TIMESTAMP '2022-04-15 07:32:12', 'very good'); 
 
-execute userplans_insert(10034,	1, TIMESTAMP '2022-05-27 08:01:09', 'data limit can be increased'); 
+execute userplans_insert(10002,	1, TIMESTAMP '2022-05-27 08:01:09', 'data limit can be increased'); 
 
-execute userplans_insert(13827,	7, TIMESTAMP '2022-06-04 09:02:11', 'cost to be reduced'); 
+execute userplans_insert(10012,	7, TIMESTAMP '2022-06-04 09:02:11', 'cost to be reduced'); 
 
-execute userplans_insert(14278,	12, TIMESTAMP '2022-06-09 10:23:13', 'not happy'); 
+execute userplans_insert(10006,	12, TIMESTAMP '2022-06-09 10:23:13', 'not happy'); 
 
-execute userplans_insert(10238,	14, TIMESTAMP '2022-07-01 11:42:27', 'good plan'); 
+execute userplans_insert(10009,	14, TIMESTAMP '2022-07-01 11:42:27', 'good plan'); 
 
-execute userplans_insert(15380,	3, TIMESTAMP '2022-08-16 12:52:57', 'good'); 
+execute userplans_insert(10005,	3, TIMESTAMP '2022-08-16 12:52:57', 'good'); 
 
-execute userplans_insert(15723,	11, TIMESTAMP '2022-09-03 13:13:16', 'satisfied'); 
+execute userplans_insert(10007,	11, TIMESTAMP '2022-09-03 13:13:16', 'satisfied'); 
 
-execute userplans_insert(13083,	10, TIMESTAMP '2022-09-17 14:16:02', 'dissatisfied'); 
+execute userplans_insert(10016,	10, TIMESTAMP '2022-09-17 14:16:02', 'dissatisfied'); 
 
-execute userplans_insert(17936,	6, TIMESTAMP '2022-09-21 15:08:25', 'excellent plan'); 
+execute userplans_insert(10008,	6, TIMESTAMP '2022-09-21 15:08:25', 'excellent plan'); 
 
-execute userplans_insert(12983,	3, TIMESTAMP '2022-10-11 16:26:00', 'cost efficient'); 
+execute userplans_insert(10015,	3, TIMESTAMP '2022-10-11 16:26:00', 'cost efficient'); 
 
-execute userplans_insert(13826,	8, TIMESTAMP '2022-10-15 17:23:16', 'plan cost is expensive'); 
+execute userplans_insert(10018,	8, TIMESTAMP '2022-10-15 17:23:16', 'plan cost is expensive'); 
 
-execute userplans_insert(19874,	13, TIMESTAMP '2022-11-09 18:15:56', 'good amount of data'); 
+execute userplans_insert(10019,	13, TIMESTAMP '2022-11-09 18:15:56', 'good amount of data'); 
 
-execute userplans_insert(13934,	7, TIMESTAMP '2022-11-19 19:05:37', 'extra data was available'); 
+execute userplans_insert(10017,	7, TIMESTAMP '2022-11-19 19:05:37', 'extra data was available'); 
 
  
 
 --newly added
  
  
-execute userplans_insert(12673,	15, TIMESTAMP '2022-08-30 11:20:47', 'good data limit');
+execute userplans_insert(10014,	15, TIMESTAMP '2022-08-30 11:20:47', 'good data limit');
 
-execute userplans_insert(10327,	12, TIMESTAMP '2022-01-14 21:32:32', 'good');
+execute userplans_insert(10011,	12, TIMESTAMP '2022-01-14 21:32:32', 'good');
 
-execute userplans_insert(19873,	6, TIMESTAMP '2022-09-17 03:43:31', 'average');
+execute userplans_insert(10001,	6, TIMESTAMP '2022-09-17 03:43:31', 'average');
 
-execute userplans_insert(15572,	4, TIMESTAMP '2022-03-02 12:21:53', 'nice');
+execute userplans_insert(10010,	4, TIMESTAMP '2022-03-02 12:21:53', 'nice');
 
-execute userplans_insert(15572,	4, TIMESTAMP '2022-06-02 23:45:33', 'nice');
+execute userplans_insert(10010,	4, TIMESTAMP '2022-06-02 23:45:33', 'nice');
 
-execute userplans_insert(15572,	4, TIMESTAMP '2022-09-03 23:59:56', 'nice');
+execute userplans_insert(10010,	4, TIMESTAMP '2022-09-03 23:59:56', 'nice');
 
-execute userplans_insert(17644,	5, TIMESTAMP '2022-03-27 11:10:02', 'expensive');
+execute userplans_insert(10003,	5, TIMESTAMP '2022-03-27 11:10:02', 'expensive');
 
-execute userplans_insert(14278,	10, TIMESTAMP '2022-09-10 12:14:31', 'good plan');
+execute userplans_insert(10006,	10, TIMESTAMP '2022-09-10 12:14:31', 'good plan');
 
-execute userplans_insert(15723,	11, TIMESTAMP '2022-10-03 21:56:21', 'satisfied');
+execute userplans_insert(10007,	11, TIMESTAMP '2022-10-03 21:56:21', 'satisfied');
 
-execute userplans_insert(15723,	12, TIMESTAMP '2022-11-04 04:32:40', 'satisfied');
+execute userplans_insert(10007,	12, TIMESTAMP '2022-11-04 04:32:40', 'satisfied');
 
 
 
 --Inserting the data into Department Table: 
 
  
+execute department_insert(deptid_seq.NEXTVAL, 'Accounting', 'accounting@gmail.com', 8754444111); 
 
-execute department_insert(10, 'Accounting', 'accounting@gmail.com', 8754444111); 
+execute department_insert(deptid_seq.NEXTVAL, 'Marketing', 'marketing@gmail.com', 8754444222); 
 
-execute department_insert(20, 'Marketing', 'marketing@gmail.com', 8754444222); 
+execute department_insert(deptid_seq.NEXTVAL, 'Technical', 'technical@gmail.com', 8754444333); 
 
-execute department_insert(30, 'Technical', 'technical@gmail.com', 8754444333); 
+execute department_insert(deptid_seq.NEXTVAL, 'Customer Service', 'customerservice@gmail.com', 8754444444); 
 
-execute department_insert(40, 'Customer Service', 'customerservice@gmail.com', 8754444444); 
-
-execute department_insert(50, 'Management', 'management@gmail.com', 8754444555); 
+execute department_insert(deptid_seq.NEXTVAL, 'Management', 'management@gmail.com', 8754444555); 
 
 
 
@@ -835,29 +845,27 @@ execute department_insert(50, 'Management', 'management@gmail.com', 8754444555);
 --not sure how many employees should be in each title and level
 --should add dept_id, level, title and remove country
 
-execute employees_insert(1003, 'Kevin', 'Swan', '38 Elm Street', 'Boston', 'Massachusets', '02160', 'United States', 8575274528, 'swan.ke@gmail.com'); 
+execute employees_insert(empid_seq.NEXTVAL, 'Kevin', 'Swan', '38 Elm Street', 'Boston', 'Massachusets', '02160', 'United States', 8575274528, 'swan.ke@gmail.com'); 
 
-execute employees_insert(1264, 'andrew', 'stone', '73 main street', 'chicago', 'illinois', '60457', 'united states', 3127352828, 'stone.an@gmail.com'); 
+execute employees_insert(empid_seq.NEXTVAL, 'andrew', 'stone', '73 main street', 'chicago', 'illinois', '60457', 'united states', 3127352828, 'stone.an@gmail.com'); 
 
-execute employees_insert(1453, 'MARK', 'ROBERT', '483 OAK STREET', 'SAN JOSE', 'CALIFORNIA', '21723', 'UNITED STATES', 4082181183, 'robert.ma@yahoo.com'); 
+execute employees_insert(empid_seq.NEXTVAL, 'MARK', 'ROBERT', '483 OAK STREET', 'SAN JOSE', 'CALIFORNIA', '21723', 'UNITED STATES', 4082181183, 'robert.ma@yahoo.com'); 
 
-execute employees_insert(1784, 'karen', 'matthews', '87 washington street', 'dallas', 'texas', '42749', 'united states', 8572945188, 'matthews.ka@outlook.com'); 
+execute employees_insert(empid_seq.NEXTVAL, 'karen', 'matthews', '87 washington street', 'dallas', 'texas', '42749', 'united states', 8572945188, 'matthews.ka@outlook.com'); 
 
-execute employees_insert(1473, 'Johnny', 'hill', '83 park street', 'manhattan', 'New York', '83683', 'United States', 3327517900, 'hill.jo@gmail.com'); 
+execute employees_insert(empid_seq.NEXTVAL, 'Johnny', 'hill', '83 park street', 'manhattan', 'New York', '83683', 'United States', 3327517900, 'hill.jo@gmail.com'); 
 
-execute employees_insert(1228, 'ISABELLA', 'MARK', '652 KOOTER LANE', 'CHARLOTTLE', 'NORTH CAROLINA', '32772', 'UNITED STATES', 2525682993, 'mark.is@yahoo.com'); 
+execute employees_insert(empid_seq.NEXTVAL, 'ISABELLA', 'MARK', '652 KOOTER LANE', 'CHARLOTTLE', 'NORTH CAROLINA', '32772', 'UNITED STATES', 2525682993, 'mark.is@yahoo.com'); 
 
-execute employees_insert(1984, 'jennifer', 'shule', '12 ersel street', 'reisterstown', 'maryland', '30028', 'united states', 3018992457, 'shule.je@gmail.com'); 
+execute employees_insert(empid_seq.NEXTVAL, 'jennifer', 'shule', '12 ersel street', 'reisterstown', 'maryland', '30028', 'united states', 3018992457, 'shule.je@gmail.com'); 
 
-execute employees_insert(1073, 'Andrew', 'Wilson', '3411 Cambridge Place', 'Dallas', 'Texas', '13831', 'United States', 7912835297, 'wilson.an@outlook.com'); 
+execute employees_insert(empid_seq.NEXTVAL, 'Andrew', 'Wilson', '3411 Cambridge Place', 'Dallas', 'Texas', '13831', 'United States', 7912835297, 'wilson.an@outlook.com'); 
 
-execute employees_insert(1835, 'SHAWN', 'HILL', '1367 FLYNN STREET', 'ROCKY RIVER', 'OHIO', '63929', 'UNITED STATES', 2569235739, 'hill.sh@yahoo.com'); 
+execute employees_insert(empid_seq.NEXTVAL, 'SHAWN', 'HILL', '1367 FLYNN STREET', 'ROCKY RIVER', 'OHIO', '63929', 'UNITED STATES', 2569235739, 'hill.sh@yahoo.com'); 
 
-execute employees_insert(1648, 'Lisa', 'Kudrow', '1468 Warner Street', 'Kinston', 'North Carolina', '32581', 'United States', 7893568255, 'kudrow.li@gmail.com'); 
+execute employees_insert(empid_seq.NEXTVAL, 'Lisa', 'Kudrow', '1468 Warner Street', 'Kinston', 'North Carolina', '32581', 'United States', 7893568255, 'kudrow.li@gmail.com'); 
 
  
- 
-
 --Inserting the data into Payments Table: 
 
  
@@ -931,195 +939,195 @@ commit;
 
 --Inserting the data into Transactions Table: 
 
- 
-
-execute transaction_insert(1,10034,'SMS',TIMESTAMP '2022-05-27 10:07:10',1,9875632100); 
-
-commit; 
-
-  
-
-execute transaction_insert(2,10034,'Call',TIMESTAMP '2022-05-27 20:21:05',10,876345901); 
+ select * from transactions
+--2 userid
+execute transaction_insert(transaction_seq.NEXTVAL,10034,'SMS',TIMESTAMP '2022-05-27 10:07:10',1,9875632100); 
 
 commit; 
 
   
 
-execute transaction_insert(3,10034,'data',TIMESTAMP '2022-05-27 20:25:43',100,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,10034,'Call',TIMESTAMP '2022-05-27 20:21:05',10,876345901); 
 
 commit; 
 
   
 
-execute transaction_insert(4,17644,'SMS',TIMESTAMP '2022-03-21 20:22:10',1,8793456279); 
+execute transaction_insert(transaction_seq.NEXTVAL,10034,'data',TIMESTAMP '2022-05-27 20:25:43',100,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(5,17644,'Call',TIMESTAMP '2022-03-22 12:06:05',30,9873648528); 
+execute transaction_insert(transaction_seq.NEXTVAL,17644,'SMS',TIMESTAMP '2022-03-21 20:22:10',1,8793456279); 
 
 commit; 
 
   
 
-execute transaction_insert(6,17644,'data',TIMESTAMP '2022-03-24 10:22:10',20,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,17644,'Call',TIMESTAMP '2022-03-22 12:06:05',30,9873648528); 
 
 commit; 
 
   
 
-execute transaction_insert(7,15572,'SMS',TIMESTAMP '2022-02-13 15:01:06',1,8736368491); 
+execute transaction_insert(transaction_seq.NEXTVAL,17644,'data',TIMESTAMP '2022-03-24 10:22:10',20,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(8,12983,'data',TIMESTAMP '2022-10-24 15:20:00',8,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,15572,'SMS',TIMESTAMP '2022-02-13 15:01:06',1,8736368491); 
 
 commit; 
 
   
 
-execute transaction_insert(9,13572,'SMS',TIMESTAMP '2022-04-28 20:00:00',1,7859768013); 
+execute transaction_insert(transaction_seq.NEXTVAL,12983,'data',TIMESTAMP '2022-10-24 15:20:00',8,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(10,15572,'data',TIMESTAMP '2022-05-11 14:07:10',300,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,13572,'SMS',TIMESTAMP '2022-04-28 20:00:00',1,7859768013); 
 
 commit; 
 
   
 
-execute transaction_insert(11,14217,'SMS',TIMESTAMP '2022-08-06 11:10:12',1,9856489032); 
+execute transaction_insert(transaction_seq.NEXTVAL,15572,'data',TIMESTAMP '2022-05-11 14:07:10',300,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(12,17644,'data',TIMESTAMP '2022-04-12 19:20:02',20,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,14217,'SMS',TIMESTAMP '2022-08-06 11:10:12',1,9856489032); 
 
 commit; 
 
   
 
-execute transaction_insert(13,19873,'SMS',TIMESTAMP '2022-04-26 10:11:12',1,8378769981); 
+execute transaction_insert(transaction_seq.NEXTVAL,17644,'data',TIMESTAMP '2022-04-12 19:20:02',20,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(14,19873,'data',TIMESTAMP '2022-05-15 09:25:22',45,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,19873,'SMS',TIMESTAMP '2022-04-26 10:11:12',1,8378769981); 
 
 commit; 
 
   
 
-execute transaction_insert(15,13827,'SMS',TIMESTAMP '2022-07-07 15:20:10',1,9564389989); 
+execute transaction_insert(transaction_seq.NEXTVAL,19873,'data',TIMESTAMP '2022-05-15 09:25:22',45,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(16,13934,'data',TIMESTAMP '2022-11-20 07:28:30',67,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,13827,'SMS',TIMESTAMP '2022-07-07 15:20:10',1,9564389989); 
 
 commit; 
 
   
 
-execute transaction_insert(17,13826,'data',TIMESTAMP '2022-11-18 22:28:10',300,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,13934,'data',TIMESTAMP '2022-11-20 07:28:30',67,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(18,10327,'SMS',TIMESTAMP '2022-01-12 18:22:11',1,8861780690); 
+execute transaction_insert(transaction_seq.NEXTVAL,13826,'data',TIMESTAMP '2022-11-18 22:28:10',300,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(19,10327,'Call',TIMESTAMP '2022-01-12 20:05:20',10,9978997883); 
+execute transaction_insert(transaction_seq.NEXTVAL,10327,'SMS',TIMESTAMP '2022-01-12 18:22:11',1,8861780690); 
 
 commit; 
 
   
 
-execute transaction_insert(20,10327,'data',TIMESTAMP '2022-01-12 20:20:11',20,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,10327,'Call',TIMESTAMP '2022-01-12 20:05:20',10,9978997883); 
 
 commit; 
 
   
 
-execute transaction_insert(21,14278,'SMS',TIMESTAMP '2022-09-23 12:23:20',1,9247668933); 
+execute transaction_insert(transaction_seq.NEXTVAL,10327,'data',TIMESTAMP '2022-01-12 20:20:11',20,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(22,13083,'Call',TIMESTAMP '2022-09-18 20:04:10',15,8864907456); 
+execute transaction_insert(transaction_seq.NEXTVAL,14278,'SMS',TIMESTAMP '2022-09-23 12:23:20',1,9247668933); 
 
 commit; 
 
   
 
-execute transaction_insert(23,13083,'data',TIMESTAMP '2022-09-20 23:10:00',400,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,13083,'Call',TIMESTAMP '2022-09-18 20:04:10',15,8864907456); 
 
 commit; 
 
   
 
-execute transaction_insert(24,15723,'SMS',TIMESTAMP '2022-09-23 12:23:20',1,8765439088); 
+execute transaction_insert(transaction_seq.NEXTVAL,13083,'data',TIMESTAMP '2022-09-20 23:10:00',400,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(25,15723,'data',TIMESTAMP '2022-10-06 20:10:00',4,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,15723,'SMS',TIMESTAMP '2022-09-23 12:23:20',1,8765439088); 
 
 commit; 
 
   
 
-execute transaction_insert(26,14278,'SMS',TIMESTAMP '2022-07-17 03:20:10',1,9987664597); 
+execute transaction_insert(transaction_seq.NEXTVAL,15723,'data',TIMESTAMP '2022-10-06 20:10:00',4,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(27,14278,'data',TIMESTAMP '2022-09-29 08:11:08',60,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,14278,'SMS',TIMESTAMP '2022-07-17 03:20:10',1,9987664597); 
 
 commit; 
 
   
 
-execute transaction_insert(28,19874,'SMS',TIMESTAMP '2022-11-10 17:22:11',1,9876453214); 
+execute transaction_insert(transaction_seq.NEXTVAL,14278,'data',TIMESTAMP '2022-09-29 08:11:08',60,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(29,19874,'data',TIMESTAMP '2022-11-12 19:10:00',500,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,19874,'SMS',TIMESTAMP '2022-11-10 17:22:11',1,9876453214); 
 
 commit; 
 
   
 
-execute transaction_insert(30,12673,'SMS',TIMESTAMP '2022-03-12 22:22:11',1,8976787894); 
+execute transaction_insert(transaction_seq.NEXTVAL,19874,'data',TIMESTAMP '2022-11-12 19:10:00',500,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(31,10238,'data',TIMESTAMP '2022-08-15 20:16:08',50,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,12673,'SMS',TIMESTAMP '2022-03-12 22:22:11',1,8976787894); 
 
 commit; 
 
   
 
-execute transaction_insert(32,15382,'SMS',TIMESTAMP '2021-12-23 23:12:09',1,8578642237); 
+execute transaction_insert(transaction_seq.NEXTVAL,10238,'data',TIMESTAMP '2022-08-15 20:16:08',50,NULL); 
+
+commit; 
+
+  
+
+execute transaction_insert(transaction_seq.NEXTVAL,15382,'SMS',TIMESTAMP '2021-12-23 23:12:09',1,8578642237); 
 
 commit; 
 
@@ -1306,7 +1314,7 @@ CREATE OR REPLACE VIEW Region_based_revenue_view(REGION, REVENUE)
 
 as select lower(u.user_state), sum(a.plan_cost)
 
-from users u, available_plans a, user_plans up 
+from user_details u, available_plans a, user_plans up 
 
 where a.plan_id=up.plan_id and up.user_id=u.user_id 
 
@@ -1329,6 +1337,21 @@ as select user_id, transaction_type, usage, destination_number, date_time from t
 
 select * from User_transaction_history where user_id=17644; 
 
+
+--7th VIEW : plan_end_date : This view will give the plan's end date for a particular user
+--change based on the latest plan - ithink its already done. check it
+
+
+CREATE OR REPLACE VIEW plan_end_date(user_id, plan_id, plan_start_date, plan_end_date) 
+
+as select u.user_id, u.plan_id, u.plan_start_date, u.plan_start_date+a.validity as plan_end_date
+from user_plans u inner join available_plans a 
+on a.plan_id=u.plan_id
+order by u.plan_start_date desc;
+
+
+select * from plan_end_date where user_id=17644
+fetch next 1 rows only; 
  
 
  
@@ -1430,7 +1453,7 @@ EXECUTE IMMEDIATE 'DROP TABLE  USER_PLANS' ;
 
 EXECUTE IMMEDIATE 'DROP TABLE  AVAILABLE_PLANS' ; 
 
-EXECUTE IMMEDIATE 'DROP TABLE  USERS' ; 
+EXECUTE IMMEDIATE 'DROP TABLE  USER_DETAILS' ; 
 EXCEPTION 
    WHEN OTHERS THEN 
       IF SQLCODE != -942 THEN 
@@ -1438,7 +1461,7 @@ EXCEPTION
       END IF; 
 END; 
 
- 
+commit;
 
 --DROPPING USERS 
 
@@ -1499,7 +1522,6 @@ order by user_id;
 
 
 
-
 --user_transaction history done
 
 CREATE OR REPLACE VIEW User_transaction_history(user_id, transaction_type, usage, destination_number, transaction_date) 
@@ -1527,6 +1549,4 @@ order by u.plan_start_date desc;
 select * from plan_end_date where user_id=17644
 fetch next 1 rows only; 
 
- 
- 
  
