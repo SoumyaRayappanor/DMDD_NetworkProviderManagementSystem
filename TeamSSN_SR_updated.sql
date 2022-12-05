@@ -365,7 +365,7 @@ emp_state varchar2(20) not null,
 
 emp_zipcode varchar2(5) not null, 
 
-emp_title varchar2(20),  
+emp_title varchar2(35),  
 
 emp_phone number(10) unique, 
 
@@ -374,7 +374,6 @@ emp_email varchar2(35)unique
 ); 
 
  
-
 
 --Creating Payments Table: 
 
@@ -1173,7 +1172,7 @@ begin
 
   object_schema => 'USER_SR', 
 
-  object_name => 'USERS', 
+  object_name => 'USER_DETAILS', 
 
   column_name => 'Identification_number', 
 
@@ -1443,13 +1442,13 @@ END;
  
 
 BEGIN 
-   EXECUTE IMMEDIATE 'DROP TABLE  TRANSACTIONS' ; 
+EXECUTE IMMEDIATE 'DROP TABLE  TRANSACTIONS' ; 
 
 EXECUTE IMMEDIATE 'DROP TABLE  PAYMENTS' ; 
 
-EXECUTE IMMEDIATE 'DROP TABLE DEPARTMENT' ; 
+EXECUTE IMMEDIATE 'DROP TABLE  EMPLOYEE_DETAILS' ;
 
-EXECUTE IMMEDIATE 'DROP TABLE  EMPLOYEE_DETAILS' ; 
+EXECUTE IMMEDIATE 'DROP TABLE DEPARTMENT' ; 
 
 EXECUTE IMMEDIATE 'DROP TABLE  USER_PLANS' ; 
 
@@ -1464,6 +1463,11 @@ EXCEPTION
 END; 
 
 commit;
+
+
+
+
+
 
 --DROPPING USERS 
 
