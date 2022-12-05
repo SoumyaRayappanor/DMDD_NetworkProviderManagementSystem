@@ -350,7 +350,7 @@ create table employee_details(
 
 emp_id number default empid_seq.nextval primary key , 
 
---dept_id number references department(dept_id),
+dept_id number references department(dept_id),
 
 emp_first_name varchar2(20) not null, 
 
@@ -364,9 +364,7 @@ emp_state varchar2(20) not null,
 
 emp_zipcode varchar2(5) not null, 
 
-emp_title varchar2(20), 
-
---emp_level varchar2(20), 
+emp_title varchar2(20),  
 
 emp_phone number(10) unique, 
 
@@ -569,7 +567,7 @@ create or replace procedure employees_insert
 
 (p_emp_id IN EMPLOYEE_DETAILS.EMP_ID%TYPE, 
 
---p_dept_id IN EMPLOYEE_DETAILS.DEPT_ID%TYPE, 
+p_dept_id IN EMPLOYEE_DETAILS.DEPT_ID%TYPE, 
 
 p_emp_fname IN EMPLOYEE_DETAILS.EMP_FIRST_NAME%TYPE, 
 
@@ -583,9 +581,7 @@ p_emp_state IN EMPLOYEE_DETAILS.EMP_STATE%TYPE,
 
 p_emp_zipcode IN EMPLOYEE_DETAILS.EMP_ZIPCODE%TYPE,
 
-p_emp_title IN EMPLOYEE_DETAILS.EMP_TITLE%TYPE, 
-
---p_emp_level IN EMPLOYEE_DETAILS.EMP_LEVEL%TYPE, 
+p_emp_title IN EMPLOYEE_DETAILS.EMP_TITLE%TYPE,  
 
 p_emp_phone IN EMPLOYEE_DETAILS.EMP_PHONE%TYPE,
 
@@ -597,7 +593,7 @@ IS
 
 BEGIN 
 
-INSERT INTO  EMPLOYEE_DETAILS VALUES (p_emp_id, p_emp_fname, p_emp_lname, p_emp_street, p_emp_city, p_emp_state, p_emp_zipcode, p_emp_title, p_emp_phone, p_emp_email); 
+INSERT INTO  EMPLOYEE_DETAILS VALUES (p_emp_id, p_dept_id, p_emp_fname, p_emp_lname, p_emp_street, p_emp_city, p_emp_state, p_emp_zipcode, p_emp_title, p_emp_phone, p_emp_email); 
 
 DBMS_OUTPUT.PUT_LINE('Employee added.'); 
 
@@ -677,7 +673,7 @@ END;
  
 --Inserting the data into USERS Table: 
 
-execute users_insert(userid_seq.NEXTVAL, 'elizabeth', 'rachel', '56 victoria street', 'hurley', 'mississippi', '02178', 'SSN',799400669,9635383643, 1, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'elizabeth', 'rachel', '56 victoria street', 'hurley', 'mississippi', '02178', 'SSN',799400669,9635383643, 1.45, 'active');  
 
 execute users_insert(userid_seq.NEXTVAL, 'Brian', 'Carlson', '137 Coal Road', 'Philadelphia', 'Pennsylvania', '28716', 'SSN',975974574,5363926482, 2.3, 'active'); 
 
@@ -685,17 +681,17 @@ execute users_insert(userid_seq.NEXTVAL, 'MIKE', 'ROSS', '46 WILSON LANE', 'DALL
 
 execute users_insert(userid_seq.NEXTVAL, 'Adam', 'Sandler', '257 Otter Avenue', 'Houstan', 'Texas', '43672', 'SSN',237904321,9045385530, 34.7, 'active'); 
 
-execute users_insert(userid_seq.NEXTVAL, 'tessa', 'thompson', '75 fleming way', 'delaware', 'ohio', '02384', 'SSN',393890269,8452956338, 0.0, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'tessa', 'thompson', '75 fleming way', 'delaware', 'ohio', '02384', 'SSN',393890269,8452956338, 2.43, 'active');  
 
 execute users_insert(userid_seq.NEXTVAL, 'andrew', 'garfield', '825 lucy lane', 'boston', 'massachusetts', '56227','SSN',708601148, 4385638359, 12.64, 'active');  
 
 execute users_insert(userid_seq.NEXTVAL, 'EMMA', 'STONE', '973 ESSEX LANE', 'TUCSON', 'ARIZONA', '73584','SSN',613921592 ,5392547606, 9.23, 'active');  
 
-execute users_insert(userid_seq.NEXTVAL, 'Taylor', 'Swift', '13 Oak Way', 'Burlington', 'Vermont', '15372','SSN', 225194478,6784668354, 0.0, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'Taylor', 'Swift', '13 Oak Way', 'Burlington', 'Vermont', '15372','SSN', 225194478,6784668354, 52.6, 'active');  
 
 execute users_insert(userid_seq.NEXTVAL, 'TOM', 'HOLLAND', '96 COLLEGE AVENUE', 'PITTSBURGH', 'PENNSYLVANIA', '43672','SSN',226749374, 8564739254, 19.43, 'active');  
 
-execute users_insert(userid_seq.NEXTVAL, 'Zendaya', 'Thomas', '867 Clarklent Street', 'Highland', 'Kansas', '34527','SSN',166147527 ,3345604563, 0.0, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'Zendaya', 'Thomas', '867 Clarklent Street', 'Highland', 'Kansas', '34527','SSN',166147527 ,3345604563, 18.32, 'active');  
 
 execute users_insert(userid_seq.NEXTVAL, 'Cole', 'Sprouse', '12 Shadow Drive', 'Columbus', 'Ohio', '57893', 'SSN',824244928,6443856398, 42.3, 'active');  
 
@@ -703,7 +699,7 @@ execute users_insert(userid_seq.NEXTVAL, 'CHANDLER', 'BING', '8786 EDINGTON LANE
 
 execute users_insert(userid_seq.NEXTVAL, 'monica', 'geller', '86 marine drive', 'Portersville', 'Pennsylvania', '56278','SSN',599373475 ,7659335473, 13.54, 'active');  
 
-execute users_insert(userid_seq.NEXTVAL, 'Rachel', 'Green', '890 Patch Road', 'Washington', 'Washington DC', '97923', 'SSN',691359918,7583695638, 0.0, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'Rachel', 'Green', '890 Patch Road', 'Washington', 'Washington DC', '97923', 'SSN',691359918,7583695638, 4.43, 'active');  
 
 execute users_insert(userid_seq.NEXTVAL, 'HARVEY', 'SPECTRE', '972 VITERO WAY', 'SACRAMENTO', 'CALIFORNIA', '96483', 'SSN',771857266,5374749547, 22.78, 'active');    
 
@@ -711,13 +707,12 @@ execute users_insert(userid_seq.NEXTVAL, 'michael', 'scott', '57 terry lane', 'm
 
 execute users_insert(userid_seq.NEXTVAL, 'JIM', 'PARSON', '90 BARNES STREET', 'INDIANAPOLIS', 'INDIANA', '76742', 'SSN',853200975,6479479025, 44.94, 'active');  
 
-execute users_insert(userid_seq.NEXTVAL, 'Pam', 'Beasly', '123 Jett Lane', 'Seattle', 'Washington', '34878', 'SSN',378868816,5382945638, 0.0, 'active');  
+execute users_insert(userid_seq.NEXTVAL, 'Pam', 'Beasly', '123 Jett Lane', 'Seattle', 'Washington', '34878', 'SSN',378868816,5382945638, 6.89, 'active');  
 
 execute users_insert(userid_seq.NEXTVAL, 'selena', 'thomas', '6538 woodrow way', 'weston', 'nebraska', '09953','SSN',506388146, 4372846672, 57.42, 'active');  
 
 execute users_insert(userid_seq.NEXTVAL, 'LANA', 'SCOTT', '994 VIRGIL STREET', 'BANGOR', 'MAINE', '19808', 'SSN',974391272,8564365788, 17.45, 'active'); 
 
- 
 
 --Inserting the data into Available_plans: 
 
@@ -842,7 +837,6 @@ execute department_insert(deptid_seq.NEXTVAL, 'Management', 'management@gmail.co
 
 --Inserting the data into Employee details Table: 
 
-
 execute employees_insert(empid_seq.nextval,10, 'Kevin', 'Swan', '38 Elm Street', 'Boston', 'Massachusets', '02160', 'Accountant', 8575274528, 'swan.ke@gmail.com');
 
 execute employees_insert(empid_seq.NEXTVAL,10, 'andrew', 'stone', '73 main street', 'chicago', 'illinois', '60457', 'Senior Accountant', 3127352828, 'stone.an@gmail.com'); 
@@ -864,6 +858,8 @@ execute employees_insert(empid_seq.NEXTVAL,40,'SHAWN', 'HILL', '1367 FLYNN STREE
 execute employees_insert(empid_seq.NEXTVAL,50,'Lisa', 'Kudrow', '1468 Warner Street', 'Kinston', 'North Carolina', '32581', 'Director', 7893568255, 'kudrow.li@gmail.com'); 
 
 commit;
+
+ 
 
  
 --Inserting the data into Payments Table: 
@@ -939,195 +935,193 @@ commit;
 
 --Inserting the data into Transactions Table: 
 
- select * from transactions
---2 userid
-execute transaction_insert(transaction_seq.NEXTVAL,10034,'SMS',TIMESTAMP '2022-05-27 10:07:10',1,9875632100); 
+
+execute transaction_insert(transaction_seq.NEXTVAL,10002,'SMS',TIMESTAMP '2022-05-27 10:07:10',1,9875632100); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,10034,'Call',TIMESTAMP '2022-05-27 20:21:05',10,876345901); 
+execute transaction_insert(transaction_seq.NEXTVAL,10002,'Call',TIMESTAMP '2022-05-27 20:21:05',10,876345901); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,10034,'data',TIMESTAMP '2022-05-27 20:25:43',100,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,10002,'data',TIMESTAMP '2022-05-27 20:25:43',100,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,17644,'SMS',TIMESTAMP '2022-03-21 20:22:10',1,8793456279); 
+execute transaction_insert(transaction_seq.NEXTVAL,10003,'SMS',TIMESTAMP '2022-03-21 20:22:10',1,8793456279); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,17644,'Call',TIMESTAMP '2022-03-22 12:06:05',30,9873648528); 
+execute transaction_insert(transaction_seq.NEXTVAL,10003,'Call',TIMESTAMP '2022-03-22 12:06:05',30,9873648528); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,17644,'data',TIMESTAMP '2022-03-24 10:22:10',20,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,10003,'data',TIMESTAMP '2022-03-24 10:22:10',20,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,15572,'SMS',TIMESTAMP '2022-02-13 15:01:06',1,8736368491); 
+execute transaction_insert(transaction_seq.NEXTVAL,10010,'SMS',TIMESTAMP '2022-02-13 15:01:06',1,8736368491); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,12983,'data',TIMESTAMP '2022-10-24 15:20:00',8,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,10015,'data',TIMESTAMP '2022-10-24 15:20:00',8,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,13572,'SMS',TIMESTAMP '2022-04-28 20:00:00',1,7859768013); 
+execute transaction_insert(transaction_seq.NEXTVAL,10004,'SMS',TIMESTAMP '2022-04-28 20:00:00',1,7859768013); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,15572,'data',TIMESTAMP '2022-05-11 14:07:10',300,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,10010,'data',TIMESTAMP '2022-05-11 14:07:10',300,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,14217,'SMS',TIMESTAMP '2022-08-06 11:10:12',1,9856489032); 
+execute transaction_insert(transaction_seq.NEXTVAL,10013,'SMS',TIMESTAMP '2022-08-06 11:10:12',1,9856489032); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,17644,'data',TIMESTAMP '2022-04-12 19:20:02',20,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,10003,'data',TIMESTAMP '2022-04-12 19:20:02',20,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,19873,'SMS',TIMESTAMP '2022-04-26 10:11:12',1,8378769981); 
+execute transaction_insert(transaction_seq.NEXTVAL,10001,'SMS',TIMESTAMP '2022-04-26 10:11:12',1,8378769981); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,19873,'data',TIMESTAMP '2022-05-15 09:25:22',45,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,10001,'data',TIMESTAMP '2022-05-15 09:25:22',45,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,13827,'SMS',TIMESTAMP '2022-07-07 15:20:10',1,9564389989); 
+execute transaction_insert(transaction_seq.NEXTVAL,10012,'SMS',TIMESTAMP '2022-07-07 15:20:10',1,9564389989); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,13934,'data',TIMESTAMP '2022-11-20 07:28:30',67,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,10017,'data',TIMESTAMP '2022-11-20 07:28:30',67,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,13826,'data',TIMESTAMP '2022-11-18 22:28:10',300,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,10018,'data',TIMESTAMP '2022-11-18 22:28:10',300,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,10327,'SMS',TIMESTAMP '2022-01-12 18:22:11',1,8861780690); 
+execute transaction_insert(transaction_seq.NEXTVAL,10011,'SMS',TIMESTAMP '2022-01-12 18:22:11',1,8861780690); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,10327,'Call',TIMESTAMP '2022-01-12 20:05:20',10,9978997883); 
+execute transaction_insert(transaction_seq.NEXTVAL,10011,'Call',TIMESTAMP '2022-01-12 20:05:20',10,9978997883); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,10327,'data',TIMESTAMP '2022-01-12 20:20:11',20,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,10011,'data',TIMESTAMP '2022-01-12 20:20:11',20,NULL); 
+
+commit; 
+
+  
+execute transaction_insert(transaction_seq.NEXTVAL,10006,'SMS',TIMESTAMP '2022-09-23 12:23:20',1,9247668933); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,14278,'SMS',TIMESTAMP '2022-09-23 12:23:20',1,9247668933); 
+execute transaction_insert(transaction_seq.NEXTVAL,10016,'Call',TIMESTAMP '2022-09-18 20:04:10',15,8864907456); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,13083,'Call',TIMESTAMP '2022-09-18 20:04:10',15,8864907456); 
+execute transaction_insert(transaction_seq.NEXTVAL,10016,'data',TIMESTAMP '2022-09-20 23:10:00',400,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,13083,'data',TIMESTAMP '2022-09-20 23:10:00',400,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,10007,'SMS',TIMESTAMP '2022-09-23 12:23:20',1,8765439088); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,15723,'SMS',TIMESTAMP '2022-09-23 12:23:20',1,8765439088); 
+execute transaction_insert(transaction_seq.NEXTVAL,10007,'data',TIMESTAMP '2022-10-06 20:10:00',4,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,15723,'data',TIMESTAMP '2022-10-06 20:10:00',4,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,10006,'SMS',TIMESTAMP '2022-07-17 03:20:10',1,9987664597); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,14278,'SMS',TIMESTAMP '2022-07-17 03:20:10',1,9987664597); 
+execute transaction_insert(transaction_seq.NEXTVAL,10006,'data',TIMESTAMP '2022-09-29 08:11:08',60,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,14278,'data',TIMESTAMP '2022-09-29 08:11:08',60,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,10019,'SMS',TIMESTAMP '2022-11-10 17:22:11',1,9876453214); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,19874,'SMS',TIMESTAMP '2022-11-10 17:22:11',1,9876453214); 
+execute transaction_insert(transaction_seq.NEXTVAL,10019,'data',TIMESTAMP '2022-11-12 19:10:00',500,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,19874,'data',TIMESTAMP '2022-11-12 19:10:00',500,NULL); 
+execute transaction_insert(transaction_seq.NEXTVAL,10014,'SMS',TIMESTAMP '2022-03-12 22:22:11',1,8976787894); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,12673,'SMS',TIMESTAMP '2022-03-12 22:22:11',1,8976787894); 
+execute transaction_insert(transaction_seq.NEXTVAL,10009,'data',TIMESTAMP '2022-08-15 20:16:08',50,NULL); 
 
 commit; 
 
   
 
-execute transaction_insert(transaction_seq.NEXTVAL,10238,'data',TIMESTAMP '2022-08-15 20:16:08',50,NULL); 
-
-commit; 
-
-  
-
-execute transaction_insert(transaction_seq.NEXTVAL,15382,'SMS',TIMESTAMP '2021-12-23 23:12:09',1,8578642237); 
+execute transaction_insert(transaction_seq.NEXTVAL,10000,'SMS',TIMESTAMP '2021-12-23 23:12:09',1,8578642237); 
 
 commit; 
 
@@ -1136,7 +1130,6 @@ commit;
 --CREATING  TRIGGERS: 
 
  
-
 create or replace TRIGGER Plan_start_update_check 
 
 Before update of PLAN_START_DATE on USER_PLANS 
@@ -1522,31 +1515,5 @@ order by user_id;
 
 
 
---user_transaction history done
-
-CREATE OR REPLACE VIEW User_transaction_history(user_id, transaction_type, usage, destination_number, transaction_date) 
-
-as select user_id, transaction_type, usage, destination_number, date_time from transactions;
-
-
-
-select * from User_transaction_history where user_id=17644; 
-
- 
-
-
---plan end date
---need to change this according to the latest plan chosen by the user
-
-CREATE OR REPLACE VIEW plan_end_date(user_id, plan_id, plan_start_date, plan_end_date) 
-
-as select u.user_id, u.plan_id, u.plan_start_date, u.plan_start_date+a.validity as plan_end_date
-from user_plans u inner join available_plans a 
-on a.plan_id=u.plan_id
-order by u.plan_start_date desc;
-
-
-select * from plan_end_date where user_id=17644
-fetch next 1 rows only; 
 
  
