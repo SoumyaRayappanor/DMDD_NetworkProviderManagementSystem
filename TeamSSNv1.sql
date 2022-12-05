@@ -1,3 +1,4 @@
+ 
 --PROJECT PHASE 3
 --TEAM SSN
 
@@ -865,71 +866,77 @@ commit;
 --Inserting the data into Payments Table: 
 
  
+execute payments_insert(payment_seq.NEXTVAL, 10000, 618148198322, 877349343, 'JPMorgan Chase', 'Success', TIMESTAMP '2021-12-22 11:20:47'); 
 
+execute payments_insert(payment_seq.NEXTVAL, 10014 , 126764622433, 879692164, 'Bank of America', 'Success', TIMESTAMP '2021-12-30 21:32:32'); 
  
+execute payments_insert(payment_seq.NEXTVAL, 10011, 713360228687, 288523104, 'Capital One',	'Success', TIMESTAMP '2022-01-12 03:43:31'); 
 
-execute payments_insert(1029,	12673,	618148198322,	877349343,	'JPMorgan Chase',	'Success',TIMESTAMP '2022-08-30 11:20:47'); 
+execute payments_insert(payment_seq.NEXTVAL, 10001 , 216224302122, 611802939, 'Bank of America', 'Success', TIMESTAMP '2022-01-17 12:21:53'); 
 
-execute payments_insert(1020,	10327,	126764622433,	879692164,	'Bank of America',	'Success',TIMESTAMP '2022-01-14 21:32:32'); 
+execute payments_insert(payment_seq.NEXTVAL, 10010,	431832400139, 951531102, 'Capital One',	'Success', TIMESTAMP '2022-02-02 23:45:33'); 
 
-execute payments_insert(1021,	19873,	713360228687,	288523104,	'Capital One',	'Success',TIMESTAMP '2022-09-17 03:43:31'); 
+execute payments_insert(payment_seq.NEXTVAL, 10004,	607021983867, 594370977, 'JPMorgan Chase', 'Success', TIMESTAMP '2022-03-13 23:55:56'); 
 
-execute payments_insert(1022,	15572,	216224302122,	611802939,	'Bank of America',	'Success',TIMESTAMP '2022-03-02 12:21:53'); 
+execute payments_insert(payment_seq.NEXTVAL, 10003,	126764622433, 326799525, 'Capital One', 'Success', TIMESTAMP '2022-03-20 11:10:02'); 
 
-execute payments_insert(1023,	15572,	431832400139,	951531102,	'Capital One',	'Success',TIMESTAMP '2022-06-02 23:45:33'); 
+execute payments_insert(payment_seq.NEXTVAL, 10013,	142013825466, 999102179, 'Bank of America', 'Success', TIMESTAMP '2022-04-15 12:14:31'); 
 
-execute payments_insert(1024,	15572,	607021983867,	594370977,	'JPMorgan Chase',	'Success',TIMESTAMP '2022-09-03 23:55:56'); 
+execute payments_insert(payment_seq.NEXTVAL, 10002,	704752642195, 511838562, 'JPMorgan Chase', 'Success', TIMESTAMP '2022-05-27 21:56:21'); 
 
-execute payments_insert(1025,	17644,	126764622433,	326799525,	'Capital One',	'Success',TIMESTAMP '2022-03-27 11:10:02'); 
+execute payments_insert(payment_seq.NEXTVAL, 10012,	801276425953, 675442235, 'Bank of America', 'Success', TIMESTAMP '2022-06-04 04:32:40'); 
 
-execute payments_insert(1026,	14278,	142013825466,	999102179,	'Bank of America',	'Success',TIMESTAMP '2022-09-10 12:14:31'); 
+execute payments_insert(payment_seq.NEXTVAL, 10006,	1371971315883530, 799400669, 'Bank of America',	'Success', TIMESTAMP '2022-06-09 00:20:00'); 
 
-execute payments_insert(1027,	15723,	704752642195,	511838562,	'JPMorgan Chase',	'Success',TIMESTAMP '2022-10-03 21:56:21'); 
+execute payments_insert(payment_seq.NEXTVAL, 10009,	7108664375894540, 799400669, 'JPMorgan Chase', 'Success', TIMESTAMP	'2022-07-01 06:13:17'); 
 
-execute payments_insert(1028,	15723,	801276425953,	675442235,	'Bank of America',	'Success',TIMESTAMP '2022-11-04 04:32:40'); 
+execute payments_insert(payment_seq.NEXTVAL, 10005,	5315383400606400, 975974574, 'PNC Financial Services', 'Success', TIMESTAMP '2022-08-16 18:48:34'); 
 
-execute payments_insert(1001,	15382,	1371971315883530,	799400669,	'Bank of America',	'Success',TIMESTAMP '2022-07-02 00:20:00'); 
+execute payments_insert(payment_seq.NEXTVAL, 10007 , 3690859741294280, 712591346, 'Bank of America', 'Success', TIMESTAMP '2022-09-03 04:19:36'); 
 
-execute payments_insert(1002,	19873,	7108664375894540,	799400669,	'JPMorgan Chase',	'Success',TIMESTAMP	'2022-01-28 06:13:17'); 
+execute payments_insert(payment_seq.NEXTVAL, 10016,	3753066656896610, 237904321, 'Capital One',	'Success', TIMESTAMP '2022-09-17 04:45:22'); 
 
-execute payments_insert(1003,	10034,	5315383400606400,	975974574,	'PNC Financial Services', 'Success',TIMESTAMP '2022-09-01 18:48:34'); 
+execute payments_insert(payment_seq.NEXTVAL, 10008,	7004884170021630, 393890269, 'PNC Financial Services','Success', TIMESTAMP '2022-09-21 03:25:01'); 
 
-execute payments_insert(1004,	17644,	3690859741294280,	712591346,	'Bank of America','Success', TIMESTAMP '2020-05-15 04:19:36'); 
+execute payments_insert(payment_seq.NEXTVAL, 10015,	8913576738049940, 708601148, 'Citigroup', 'Success', TIMESTAMP '2022-10-11 04:37:25'); 
 
-execute payments_insert(1005,	13572,	3753066656896610,	237904321,	'Capital One',	'Success'	,TIMESTAMP '2021-03-01 04:45:22'); 
+execute payments_insert(payment_seq.NEXTVAL, 10018,	1249498014817310, 613921592, 'JPMorgan Chase', 'Success', TIMESTAMP '2022-10-15 16:36:56'); 
 
-execute payments_insert(1006,	15380,	7004884170021630,	393890269,	'PNC Financial Services','Success',TIMESTAMP '2021-10-28 03:25:01'); 
+execute payments_insert(payment_seq.NEXTVAL, 10019,	8744336085399580, 225194478, 'Bank of America', 'Success', TIMESTAMP '2022-11-09 11:17:17'); 
 
-execute payments_insert(1007,	14278,	8913576738049940,	708601148,	'Citigroup',	'Success',	TIMESTAMP '2022-08-08 04:37:25'); 
+execute payments_insert(payment_seq.NEXTVAL, 10017,	6428948984576800, 166147527, 'JPMorgan Chase', 'Success', TIMESTAMP '2022-11-19 22:59:54'); 
 
-execute payments_insert(1008,	15723,	1249498014817310,	613921592,	'JPMorgan Chase',	'Success',TIMESTAMP '2020-10-20 16:36:56'); 
+execute payments_insert(payment_seq.NEXTVAL, 10014,	126764622433, 879692164, 'Bank of America',	'Success', TIMESTAMP '2022-08-30 13:40:29'); 
 
-execute payments_insert(1009,	17936,	8744336085399580,	225194478,	'Bank of America',	'Success',TIMESTAMP '2020-04-25 11:17:17'); 
+execute payments_insert(payment_seq.NEXTVAL, 10011,	713360228687, 288523104, 'Capital One',	'Success', TIMESTAMP '2022-01-14 15:21:32'); 
 
-execute payments_insert(1010,	10238,	6428948984576800,	166147527,	'JPMorgan Chase',	'Success',TIMESTAMP '2021-11-02 22:59:54'); 
+execute payments_insert(payment_seq.NEXTVAL, 10001,	216224302122, 611802939, 'Bank of America', 'Success', TIMESTAMP '2022-09-17 01:41:26'); 
 
-execute payments_insert(1011,	15572,	7014934083554950,	824244928,	'JPMorgan Chase',	'Success',TIMESTAMP '2020-02-29 13:40:29'); 
+execute payments_insert(payment_seq.NEXTVAL, 10010,	431832400139, 951531102, 'Capital One', 'Success', TIMESTAMP '2022-03-02 10:12:41'); 
 
-execute payments_insert(1012,	10327,	111304518288,	159380974,	'Capital One',	'Success',TIMESTAMP '2021-11-16 15:21:32'); 
+execute payments_insert(payment_seq.NEXTVAL, 10010,	431832400139, 951531102, 'Capital One', 'Success', TIMESTAMP '2022-06-02 17:41:24'); 
 
-execute payments_insert(1013,	13827,	405181052647,	599373475,	'Citigroup',	'Success',TIMESTAMP '2020-08-10 01:41:26'); 
+execute payments_insert(payment_seq.NEXTVAL, 10010,	431832400139, 951531102, 'Capital One',	'Success', TIMESTAMP '2022-09-03 06:51:51'); 
 
-execute payments_insert(1014,	14217,	381936111489,	691359918,	'Bank of America',	'Success',TIMESTAMP '2022-05-30 10:12:41'); 
+execute payments_insert(payment_seq.NEXTVAL, 10003,	126764622433, 326799525, 'Capital One',	'Success', TIMESTAMP '2022-03-27 12:09:05'); 
 
-execute payments_insert(1015,	12673,	870860633793,	771857266,	'Citigroup','Success',TIMESTAMP '2022-11-16 17:41:24'); 
+execute payments_insert(payment_seq.NEXTVAL, 10006,	1371971315883530, 799400669, 'Bank of America', 'Success', TIMESTAMP '2022-09-10 22:08:53'); 
 
-execute payments_insert(1016,	12983,	174709887052,	281099656,	'PNC Financial Services',	'Success',TIMESTAMP '2022-03-12 06:51:51'); 
+execute payments_insert(payment_seq.NEXTVAL, 10007,	3690859741294280, 712591346, 'Bank of America',	'Success', TIMESTAMP '2022-10-03 03:18:21'); 
 
-execute payments_insert(1017,	13083,	250911367507,	378868816,	'Citigroup',	'Failed',TIMESTAMP '2020-01-07 12:09:05'); 
+execute payments_insert(payment_seq.NEXTVAL, 10007,	3690859741294280, 712591346, 'Bank of America',	'Success', TIMESTAMP '2022-11-04 03:18:21'); 
 
-execute payments_insert(1018,	13934,	331781750185,	506388146,	'Bank of America','Failed',TIMESTAMP '2021-03-22 22:08:53'); 
+execute payments_insert(payment_seq.NEXTVAL, 10001,	216224302122, 611802939, 'Bank of America',	'Failed', TIMESTAMP '2021-12-16 03:18:21'); 
 
-execute payments_insert(1019,	13826,	168050160781,	853200975,	'Capital One',	'Success',TIMESTAMP '2021-12-08 03:18:21'); 
+execute payments_insert(payment_seq.NEXTVAL, 10008,	1249498014817310, 613921592, 'JPMorgan Chase',	'Failed', TIMESTAMP '2022-08-22 03:18:21'); 
 
-commit; 
+execute payments_insert(payment_seq.NEXTVAL, 10011,	713360228687, 288523104, 'Capital One',	'Failed', TIMESTAMP '2021-09-05 03:18:21');
 
+execute payments_insert(payment_seq.NEXTVAL, 10016,	3753066656896610, 237904321, 'Capital One',	'Failed', TIMESTAMP '2022-08-20 03:18:21');
  
+execute payments_insert(payment_seq.NEXTVAL, 10019,	8744336085399580, 225194478, 'Bank of America',	'Failed', TIMESTAMP '2022-08-10 03:18:21');
 
+commit;
 
  
 
@@ -1410,6 +1417,8 @@ END;
 
 BEGIN 
   EXECUTE IMMEDIATE 'DROP SEQUENCE  userid_seq '; 
+  
+EXECUTE IMMEDIATE 'DROP SEQUENCE  avail_plans_seq '  ; 
 
 EXECUTE IMMEDIATE 'DROP SEQUENCE  deptid_seq '; 
 
