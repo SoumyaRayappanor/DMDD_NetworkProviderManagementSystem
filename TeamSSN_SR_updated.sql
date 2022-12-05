@@ -946,192 +946,183 @@ execute transaction_insert(transaction_seq.NEXTVAL,10002,'SMS',TIMESTAMP '2022-0
 
 commit; 
 
-  
-
 execute transaction_insert(transaction_seq.NEXTVAL,10002,'Call',TIMESTAMP '2022-05-27 20:21:05',10,876345901); 
 
 commit; 
-
-  
 
 execute transaction_insert(transaction_seq.NEXTVAL,10002,'data',TIMESTAMP '2022-05-27 20:25:43',100,NULL); 
 
 commit; 
 
-  
-
 execute transaction_insert(transaction_seq.NEXTVAL,10003,'SMS',TIMESTAMP '2022-03-21 20:22:10',1,8793456279); 
 
 commit; 
-
-  
 
 execute transaction_insert(transaction_seq.NEXTVAL,10003,'Call',TIMESTAMP '2022-03-22 12:06:05',30,9873648528); 
 
 commit; 
 
-  
-
 execute transaction_insert(transaction_seq.NEXTVAL,10003,'data',TIMESTAMP '2022-03-24 10:22:10',20,NULL); 
 
 commit; 
-
-  
 
 execute transaction_insert(transaction_seq.NEXTVAL,10010,'SMS',TIMESTAMP '2022-02-13 15:01:06',1,8736368491); 
 
 commit; 
 
-  
-
 execute transaction_insert(transaction_seq.NEXTVAL,10015,'data',TIMESTAMP '2022-10-24 15:20:00',8,NULL); 
 
 commit; 
-
-  
 
 execute transaction_insert(transaction_seq.NEXTVAL,10004,'SMS',TIMESTAMP '2022-04-28 20:00:00',1,7859768013); 
 
 commit; 
 
-  
-
 execute transaction_insert(transaction_seq.NEXTVAL,10010,'data',TIMESTAMP '2022-05-11 14:07:10',300,NULL); 
 
 commit; 
-
-  
 
 execute transaction_insert(transaction_seq.NEXTVAL,10013,'SMS',TIMESTAMP '2022-08-06 11:10:12',1,9856489032); 
 
 commit; 
 
-  
-
 execute transaction_insert(transaction_seq.NEXTVAL,10003,'data',TIMESTAMP '2022-04-12 19:20:02',20,NULL); 
 
 commit; 
-
-  
 
 execute transaction_insert(transaction_seq.NEXTVAL,10001,'SMS',TIMESTAMP '2022-04-26 10:11:12',1,8378769981); 
 
 commit; 
 
-  
-
 execute transaction_insert(transaction_seq.NEXTVAL,10001,'data',TIMESTAMP '2022-05-15 09:25:22',45,NULL); 
 
 commit; 
-
-  
 
 execute transaction_insert(transaction_seq.NEXTVAL,10012,'SMS',TIMESTAMP '2022-07-07 15:20:10',1,9564389989); 
 
 commit; 
 
-  
-
 execute transaction_insert(transaction_seq.NEXTVAL,10017,'data',TIMESTAMP '2022-11-20 07:28:30',67,NULL); 
 
 commit; 
-
-  
 
 execute transaction_insert(transaction_seq.NEXTVAL,10018,'data',TIMESTAMP '2022-11-18 22:28:10',300,NULL); 
 
 commit; 
 
-  
-
 execute transaction_insert(transaction_seq.NEXTVAL,10011,'SMS',TIMESTAMP '2022-01-12 18:22:11',1,8861780690); 
 
 commit; 
-
-  
 
 execute transaction_insert(transaction_seq.NEXTVAL,10011,'Call',TIMESTAMP '2022-01-12 20:05:20',10,9978997883); 
 
 commit; 
 
-  
-
 execute transaction_insert(transaction_seq.NEXTVAL,10011,'data',TIMESTAMP '2022-01-12 20:20:11',20,NULL); 
 
 commit; 
 
-  
 execute transaction_insert(transaction_seq.NEXTVAL,10006,'SMS',TIMESTAMP '2022-09-23 12:23:20',1,9247668933); 
 
 commit; 
-
-  
 
 execute transaction_insert(transaction_seq.NEXTVAL,10016,'Call',TIMESTAMP '2022-09-18 20:04:10',15,8864907456); 
 
 commit; 
 
-  
-
 execute transaction_insert(transaction_seq.NEXTVAL,10016,'data',TIMESTAMP '2022-09-20 23:10:00',400,NULL); 
 
 commit; 
-
-  
 
 execute transaction_insert(transaction_seq.NEXTVAL,10007,'SMS',TIMESTAMP '2022-09-23 12:23:20',1,8765439088); 
 
 commit; 
 
-  
-
 execute transaction_insert(transaction_seq.NEXTVAL,10007,'data',TIMESTAMP '2022-10-06 20:10:00',4,NULL); 
 
 commit; 
-
-  
 
 execute transaction_insert(transaction_seq.NEXTVAL,10006,'SMS',TIMESTAMP '2022-07-17 03:20:10',1,9987664597); 
 
 commit; 
 
-  
-
 execute transaction_insert(transaction_seq.NEXTVAL,10006,'data',TIMESTAMP '2022-09-29 08:11:08',60,NULL); 
 
 commit; 
-
-  
 
 execute transaction_insert(transaction_seq.NEXTVAL,10019,'SMS',TIMESTAMP '2022-11-10 17:22:11',1,9876453214); 
 
 commit; 
 
-  
-
 execute transaction_insert(transaction_seq.NEXTVAL,10019,'data',TIMESTAMP '2022-11-12 19:10:00',500,NULL); 
 
 commit; 
-
-  
 
 execute transaction_insert(transaction_seq.NEXTVAL,10014,'SMS',TIMESTAMP '2022-03-12 22:22:11',1,8976787894); 
 
 commit; 
 
-  
-
 execute transaction_insert(transaction_seq.NEXTVAL,10009,'data',TIMESTAMP '2022-08-15 20:16:08',50,NULL); 
 
 commit; 
-
-  
 
 execute transaction_insert(transaction_seq.NEXTVAL,10000,'SMS',TIMESTAMP '2021-12-23 23:12:09',1,8578642237); 
 
 commit; 
 
  
+--newly added
+
+execute transaction_insert(transaction_seq.NEXTVAL,10014,'data',TIMESTAMP '2022-09-10 12:32:21',23.64,NULL); 
+
+commit; 
+
+execute transaction_insert(transaction_seq.NEXTVAL,10014,'SMS',TIMESTAMP '2021-10-30 14:43:42',1,8578642237); 
+
+commit;
+
+execute transaction_insert(transaction_seq.NEXTVAL,10011,'SMS',TIMESTAMP '2022-02-10 12:32:21',1,7327452755); 
+
+commit; 
+
+execute transaction_insert(transaction_seq.NEXTVAL,10011,'call',TIMESTAMP '2022-04-11 20:53:32',89,3427455527); 
+
+commit;
+
+execute transaction_insert(transaction_seq.NEXTVAL,10011,'call',TIMESTAMP '2022-04-11 20:56:55',120,3427455527); 
+
+commit;
+
+execute transaction_insert(transaction_seq.NEXTVAL,10001,'data',TIMESTAMP '2022-11-29 10:32:42',32.54,9835384427); 
+
+commit; 
+
+execute transaction_insert(transaction_seq.NEXTVAL,10010,'Call',TIMESTAMP '2022-07-07 12:13:00',235,5262899360); 
+
+commit; 
+
+execute transaction_insert(transaction_seq.NEXTVAL,10010,'data',TIMESTAMP '2022-08-03 03:31:54',12.53,NULL); 
+
+commit; 
+
+execute transaction_insert(transaction_seq.NEXTVAL,10010,'SMS',TIMESTAMP '2022-10-01 23:12:54',1,5628993001); 
+
+commit; 
+
+execute transaction_insert(transaction_seq.NEXTVAL,10007,'Call',TIMESTAMP '2022-12-03 01:32:43',63,8946382561); 
+
+commit; 
+
+execute transaction_insert(transaction_seq.NEXTVAL,10008,'data',TIMESTAMP '2022-10-01 21:31:43',32.54,NULL); 
+
+commit; 
+
+execute transaction_insert(transaction_seq.NEXTVAL,10008,'SMS',TIMESTAMP '2022-11-05 15:43:54',1,8358368243); 
+
+commit; 
+
+
+
 
 --CREATING  TRIGGERS: 
 
@@ -1367,7 +1358,7 @@ BEGIN
 
     object_schema => 'user_sr', 
 
-    object_name   => 'users', 
+    object_name   => 'user_details', 
 
     policy_name   => 'User_identification policy' 
 
