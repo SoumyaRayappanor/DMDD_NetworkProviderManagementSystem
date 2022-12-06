@@ -11,7 +11,7 @@ select * from user_details;
 select * from user_plans;
 select * from payments;
 
- 
+
  
 --(1)	DDL SCRIPT:
 --(a)	Creating the users and granting them rights respectively
@@ -1070,7 +1070,7 @@ execute transaction_insert(transaction_seq.NEXTVAL,10000,'SMS',TIMESTAMP '2021-1
 
 commit; 
 
- 
+
 --newly added
 
 execute transaction_insert(transaction_seq.NEXTVAL,10014,'data',TIMESTAMP '2022-09-10 12:32:21',23.64,NULL); 
@@ -1126,7 +1126,7 @@ commit;
 
 --CREATING  TRIGGERS: 
 
- 
+--trigger logic is wrong, check it
 create or replace TRIGGER Plan_start_update_check 
 
 Before update of PLAN_START_DATE on USER_PLANS 
@@ -1145,9 +1145,53 @@ END;
 
 / 
 
- 
 
- 
+
+
+
+
+CREATE OR REPLACE TRIGGER trans_type
+BEFORE INSERT ON transactions
+FOR EACH ROW
+BEGIN
+    if lower(:new.transaction_type) not in ('sms', 'call', 'data') then
+        raise_application_error(-20000, 'Please enter a valid transaction_type - call, sms, or data ');
+    end if;
+
+END;
+/
+
+
+
+CREATE OR REPLACE TRIGGER sms_usage
+BEFORE INSERT ON transactions
+FOR EACH ROW
+
+WHEN (lower(new.transaction_type)='sms')
+BEGIN
+    if (:new.usage) != 1 then
+        raise_application_error(-20000, 'Usage should always be 1 when the transaction_type is SMS');
+    end if;
+END;
+/
+
+
+
+
+CREATE OR REPLACE TRIGGER dest_num
+BEFORE INSERT ON transactions
+FOR EACH ROW
+
+WHEN (lower(new.transaction_type)='data')
+BEGIN
+    if (:new.destination_number) is not null then
+        raise_application_error(-20000, 'Destination_number should always be NULL when the transaction_type is data');
+    end if;
+END;
+/
+
+
+
 
 --(3) MASKING: 
 
@@ -1215,11 +1259,11 @@ end;
 
 --(4) REPORTS/VIEWS : 
 
- 
 
  
 
  
+
 
 --1ST VIEW :  PLAN_WISE REVENUE: Creating the report for plan_wise revenue: 
  
@@ -1325,7 +1369,7 @@ as select user_id, transaction_type, usage, destination_number, date_time from t
 
 
 
-select * from User_transaction_history where user_id=17644; 
+select * from User_transaction_history where user_id=10006; 
 
 
 --7th VIEW : plan_end_date : This view will give the plan's end date for a particular user
@@ -1340,7 +1384,7 @@ on a.plan_id=u.plan_id
 order by u.plan_start_date desc;
 
 
-select * from plan_end_date where user_id=17644
+select * from plan_end_date where user_id=10007
 fetch next 1 rows only; 
  
 
@@ -1405,18 +1449,20 @@ END;
 
 -- dropping sequences 
 
-BEGIN 
-  EXECUTE IMMEDIATE 'DROP SEQUENCE  userid_seq '; 
-  
-EXECUTE IMMEDIATE 'DROP SEQUENCE  avail_plans_seq '  ; 
-
-EXECUTE IMMEDIATE 'DROP SEQUENCE  deptid_seq '; 
+BEGIN  
 
 EXECUTE IMMEDIATE 'DROP SEQUENCE  empid_seq '; 
+
+EXECUTE IMMEDIATE 'DROP SEQUENCE  deptid_seq ';
 
 EXECUTE IMMEDIATE 'DROP SEQUENCE  payment_seq '  ; 
 
 EXECUTE IMMEDIATE 'DROP SEQUENCE transaction_seq ' ; 
+
+EXECUTE IMMEDIATE 'DROP SEQUENCE  userid_seq ';
+
+EXECUTE IMMEDIATE 'DROP SEQUENCE  avail_plans_seq '  ; 
+
 EXCEPTION 
   WHEN OTHERS THEN 
     IF SQLCODE != -2289 THEN 
@@ -1484,34 +1530,6 @@ EXCEPTION
 END;
 
 
-
-
-
-
-
-
-
-#####################################
-
-select * from transactions
-select * from available_plans
-select * from user_plans order by user_id
-
-select user_id, usage from transactions where transaction_type='SMS' order by user_id
-
-
---plan balance not done
-
-select u.user_id, u.plan_id, 
-count(t.usage)
-from transactions t inner join user_plans u
-on u.user_id=t.user_id
-inner join available_plans a
-on a.plan_id=u.plan_id
-where t.transaction_type='SMS'
-and a.plan_id=u.plan_id
-group by u.user_id, u.plan_id
-order by user_id;
 
 
 
