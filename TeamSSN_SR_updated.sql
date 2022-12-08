@@ -697,7 +697,7 @@ BEGIN
 END;
 
  
-
+--not needed
 BEGIN
     IF check_user_exist (10036) = 0 THEN
         DBMS_OUTPUT.PUT_LINE('User does not exist');
@@ -706,7 +706,7 @@ END;
 
 /
 
-select check_user_exist(10036) from dual;
+check_user_exist(10036) from dual;
 
 
 
@@ -822,6 +822,254 @@ END;
 
 
 select check_emp_exist(50008) from dual;
+
+
+
+
+
+
+--(5) check payment status while adding the records to user_plans table
+--this can be used to add the records to user_plans table instaed of directly entering the values - needs to be modified
+
+
+
+CREATE OR REPLACE FUNCTION check_payment_status(
+    p_payment_id NUMBER
+) 
+RETURN NUMBER
+IS
+    l_pay_status VARCHAR2(15);
+BEGIN
+    
+    SELECT payment_status
+    INTO l_pay_status
+    FROM payments
+    WHERE payment_id=p_payment_id;
+    
+    IF lower(l_pay_status) = 'success'
+   THEN
+      RETURN 1;
+   ELSE
+      RETURN 0;
+   END IF;
+END;
+
+ 
+-------------
+BEGIN
+    IF check_payment_status (70004) = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('Payment failed');
+    END IF;
+END;
+
+/
+-----------
+
+select check_payment_status(70004) from dual;
+
+
+
+
+
+
+
+
+--CREATING  TRIGGERS: 
+
+--trigger logic is wrong, check it
+create or replace TRIGGER Plan_start_update_check 
+
+Before update of PLAN_START_DATE on USER_PLANS 
+
+FOR EACH ROW 
+
+BEGIN 
+
+IF :NEW.PLAN_START_DATE < :OLD.PLAN_START_DATE THEN 
+
+RAISE_APPLICATION_ERROR(-20125,'Updated Plan start date cannot be lesser than current plan start date'); 
+
+END IF; 
+
+END; 
+
+/ 
+
+
+
+
+
+
+
+CREATE OR REPLACE TRIGGER trans_type
+BEFORE INSERT ON transactions
+FOR EACH ROW
+
+--[WHEN condition]
+--DECLARE
+--    declaration statements
+BEGIN
+    if lower(:new.transaction_type) not in ('sms', 'call', 'data') then
+        raise_application_error(-20000, 'Please enter a valid transaction_type - call, sms, or data ');
+    end if;
+--EXCEPTION
+    --exception_handling statements
+END;
+/
+
+
+
+CREATE OR REPLACE TRIGGER sms_usage
+BEFORE INSERT ON transactions
+FOR EACH ROW
+
+WHEN (lower(new.transaction_type)='sms')
+BEGIN
+    if (:new.usage) != 1 then
+        raise_application_error(-20000, 'Usage should always be 1 when the transaction_type is SMS');
+    end if;
+--EXCEPTION
+    --exception_handling statements
+END;
+/
+
+
+
+
+CREATE OR REPLACE TRIGGER dest_num
+BEFORE INSERT ON transactions
+FOR EACH ROW
+
+WHEN (lower(new.transaction_type)='data')
+BEGIN
+    if (:new.destination_number) is not null then
+        raise_application_error(-20000, 'Destination_number should always be NULL when the transaction_type is data');
+    end if;
+--EXCEPTION
+    --exception_handling statements
+END;
+/
+
+
+
+
+
+
+CREATE OR REPLACE TRIGGER plan_type_trig
+BEFORE INSERT ON available_plans
+FOR EACH ROW
+
+BEGIN
+    if lower(:new.plan_type) not in ('prepaid', 'postpaid') then
+        raise_application_error(-20000, 'Please enter a valid plan_type - prepaid or postpaid ');
+    end if;
+--EXCEPTION
+    --exception_handling statements
+END;
+/
+
+
+
+
+
+CREATE OR REPLACE TRIGGER user_status_trig
+BEFORE INSERT ON user_details
+FOR EACH ROW
+
+BEGIN
+    if lower(:new.user_status) not in ('active', 'deactivated') then
+        raise_application_error(-20000, 'Please enter a valid user_status - active or deactivated ');
+    end if;
+--EXCEPTION
+    --exception_handling statements
+END;
+/
+
+
+
+--------------------
+
+
+ 
+
+
+CREATE OR REPLACE TRIGGER check_user_exist_trig
+BEFORE INSERT ON user_plans
+FOR EACH ROW
+
+BEGIN
+    IF check_user_exist (10036) = 0 THEN
+    --not sure what to enter as the parameter
+        DBMS_OUTPUT.PUT_LINE('User does not exist');
+    END IF;
+END;
+
+
+
+
+
+
+
+
+
+CREATE OR REPLACE TRIGGER check_user_status_trig
+BEFORE INSERT ON user_plans
+FOR EACH ROW
+
+BEGIN
+    IF check_user_status (10036) = 0 THEN
+    --not sure what to enter as the parameter
+        DBMS_OUTPUT.PUT_LINE('User has been deactivated');
+    END IF;
+END;
+
+
+
+
+
+CREATE OR REPLACE TRIGGER check_plan_exist_trig
+BEFORE INSERT ON user_plans
+FOR EACH ROW
+
+BEGIN
+    IF check_plan_exist (10036) = 0 THEN
+    --not sure what to enter as the parameter
+        DBMS_OUTPUT.PUT_LINE('Plan does not exist');
+    END IF;
+END;
+
+
+
+
+
+CREATE OR REPLACE TRIGGER check_emp_exist_trig
+BEFORE INSERT ON user_details
+FOR EACH ROW
+
+BEGIN
+    IF check_emp_exist (10036) = 0 THEN
+    --not sure what to enter as the parameter
+        DBMS_OUTPUT.PUT_LINE('Employee does not exist');
+    END IF;
+END;
+
+
+
+
+
+
+
+
+CREATE OR REPLACE TRIGGER check_payment_status_trig
+BEFORE INSERT ON user_plans
+FOR EACH ROW
+
+BEGIN
+    IF check_payment_status (70006) = 0 THEN
+    --not sure what to enter as the parameter
+        DBMS_OUTPUT.PUT_LINE('Payment failed');
+    END IF;
+END;
 
 
 
@@ -1286,116 +1534,6 @@ commit;
 --execute transaction_insert(transaction_seq.NEXTVAL,10008,'data',TIMESTAMP '2022-11-05 15:43:54',2,8358368243); 
 
 
-
---CREATING  TRIGGERS: 
-
---trigger logic is wrong, check it
-create or replace TRIGGER Plan_start_update_check 
-
-Before update of PLAN_START_DATE on USER_PLANS 
-
-FOR EACH ROW 
-
-BEGIN 
-
-IF :NEW.PLAN_START_DATE < :OLD.PLAN_START_DATE THEN 
-
-RAISE_APPLICATION_ERROR(-20125,'Updated Plan start date cannot be lesser than current plan start date'); 
-
-END IF; 
-
-END; 
-
-/ 
-
-
-
-
-
-
-CREATE OR REPLACE TRIGGER trans_type
-BEFORE INSERT ON transactions
-FOR EACH ROW
-
---[WHEN condition]
---DECLARE
---    declaration statements
-BEGIN
-    if lower(:new.transaction_type) not in ('sms', 'call', 'data') then
-        raise_application_error(-20000, 'Please enter a valid transaction_type - call, sms, or data ');
-    end if;
---EXCEPTION
-    --exception_handling statements
-END;
-/
-
-
-
-CREATE OR REPLACE TRIGGER sms_usage
-BEFORE INSERT ON transactions
-FOR EACH ROW
-
-WHEN (lower(new.transaction_type)='sms')
-BEGIN
-    if (:new.usage) != 1 then
-        raise_application_error(-20000, 'Usage should always be 1 when the transaction_type is SMS');
-    end if;
---EXCEPTION
-    --exception_handling statements
-END;
-/
-
-
-
-
-CREATE OR REPLACE TRIGGER dest_num
-BEFORE INSERT ON transactions
-FOR EACH ROW
-
-WHEN (lower(new.transaction_type)='data')
-BEGIN
-    if (:new.destination_number) is not null then
-        raise_application_error(-20000, 'Destination_number should always be NULL when the transaction_type is data');
-    end if;
---EXCEPTION
-    --exception_handling statements
-END;
-/
-
-
-
-
-
-
-CREATE OR REPLACE TRIGGER plan_type_trig
-BEFORE INSERT ON available_plans
-FOR EACH ROW
-
-BEGIN
-    if lower(:new.plan_type) not in ('prepaid', 'postpaid') then
-        raise_application_error(-20000, 'Please enter a valid plan_type - prepaid or postpaid ');
-    end if;
---EXCEPTION
-    --exception_handling statements
-END;
-/
-
-
-
-
-
-CREATE OR REPLACE TRIGGER user_status_trig
-BEFORE INSERT ON user_details
-FOR EACH ROW
-
-BEGIN
-    if lower(:new.user_status) not in ('active', 'deactivated') then
-        raise_application_error(-20000, 'Please enter a valid user_status - active or deactivated ');
-    end if;
---EXCEPTION
-    --exception_handling statements
-END;
-/
 
 
 --(3) MASKING: 
