@@ -669,6 +669,164 @@ END;
 
  
 
+-- Creating functions
+
+--(1) check user existance while adding the records to user_plans table
+
+
+
+CREATE OR REPLACE FUNCTION check_user_exist(
+    p_user_id NUMBER
+) 
+RETURN NUMBER
+IS
+    l_count NUMBER := 0;
+BEGIN
+    
+    SELECT count(*)
+    INTO l_count
+    FROM user_details
+    WHERE user_id=p_user_id;
+    
+    IF l_count = 1
+   THEN
+      RETURN 1;
+   ELSE
+      RETURN 0;
+   END IF;
+END;
+
+ 
+
+BEGIN
+    IF check_user_exist (10036) = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('User does not exist');
+    END IF;
+END;
+
+/
+
+select check_user_exist(10036) from dual;
+
+
+
+
+
+
+
+--(2) check user status while adding the records to user_plans table
+
+
+
+CREATE OR REPLACE FUNCTION check_user_status(
+    p_user_id NUMBER
+) 
+RETURN NUMBER
+IS
+    l_status VARCHAR2(15);
+BEGIN
+    
+    SELECT user_status
+    INTO l_status
+    FROM user_details
+    WHERE user_id=p_user_id;
+    
+    IF lower(l_status) = 'active'
+   THEN
+      RETURN 1;
+   ELSE
+      RETURN 0;
+   END IF;
+END;
+
+ 
+-------------
+BEGIN
+    IF check_user_status (10036) = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('User does not exist');
+    END IF;
+END;
+
+/
+-----------
+
+select check_user_status(10008) from dual;
+
+
+
+
+
+
+--(3) check plan existance while adding the records to user_plans table
+
+
+
+CREATE OR REPLACE FUNCTION check_plan_exist(
+    p_plan_id NUMBER
+) 
+RETURN NUMBER
+IS
+    l_pcount NUMBER := 0;
+BEGIN
+    
+    SELECT count(*)
+    INTO l_pcount
+    FROM available_plans
+    WHERE plan_id=p_plan_id;
+    
+    IF l_pcount = 1
+   THEN
+      RETURN 1;
+   ELSE
+      RETURN 0;
+   END IF;
+END;
+
+/
+
+
+select check_plan_exist(14) from dual;
+
+
+
+
+
+
+
+
+--(4) check employee existance while adding the records to user_details table
+
+
+CREATE OR REPLACE FUNCTION check_emp_exist(
+    p_emp_id NUMBER
+) 
+RETURN NUMBER
+IS
+    l_ecount NUMBER := 0;
+BEGIN
+    
+    SELECT count(*)
+    INTO l_ecount
+    FROM employee_details
+    WHERE emp_id=p_emp_id;
+    
+    IF l_ecount = 1
+   THEN
+      RETURN 1;
+   ELSE
+      RETURN 0;
+   END IF;
+END;
+
+/
+
+
+select check_emp_exist(50008) from dual;
+
+
+
+
+
 
  
 --Inserting the data into USERS Table: 
@@ -1122,6 +1280,11 @@ execute transaction_insert(transaction_seq.NEXTVAL,10008,'SMS',TIMESTAMP '2022-1
 commit; 
 
 
+--------------------
+--execute transaction_insert(transaction_seq.NEXTVAL,10000,'test',TIMESTAMP '2021-12-23 23:12:09',1,8578642237); 
+--execute transaction_insert(transaction_seq.NEXTVAL,10008,'sms',TIMESTAMP '2022-11-05 15:43:54',2,8358368243); 
+--execute transaction_insert(transaction_seq.NEXTVAL,10008,'data',TIMESTAMP '2022-11-05 15:43:54',2,8358368243); 
+
 
 
 --CREATING  TRIGGERS: 
@@ -1153,11 +1316,16 @@ END;
 CREATE OR REPLACE TRIGGER trans_type
 BEFORE INSERT ON transactions
 FOR EACH ROW
+
+--[WHEN condition]
+--DECLARE
+--    declaration statements
 BEGIN
     if lower(:new.transaction_type) not in ('sms', 'call', 'data') then
         raise_application_error(-20000, 'Please enter a valid transaction_type - call, sms, or data ');
     end if;
-
+--EXCEPTION
+    --exception_handling statements
 END;
 /
 
@@ -1172,6 +1340,8 @@ BEGIN
     if (:new.usage) != 1 then
         raise_application_error(-20000, 'Usage should always be 1 when the transaction_type is SMS');
     end if;
+--EXCEPTION
+    --exception_handling statements
 END;
 /
 
@@ -1187,10 +1357,45 @@ BEGIN
     if (:new.destination_number) is not null then
         raise_application_error(-20000, 'Destination_number should always be NULL when the transaction_type is data');
     end if;
+--EXCEPTION
+    --exception_handling statements
 END;
 /
 
 
+
+
+
+
+CREATE OR REPLACE TRIGGER plan_type_trig
+BEFORE INSERT ON available_plans
+FOR EACH ROW
+
+BEGIN
+    if lower(:new.plan_type) not in ('prepaid', 'postpaid') then
+        raise_application_error(-20000, 'Please enter a valid plan_type - prepaid or postpaid ');
+    end if;
+--EXCEPTION
+    --exception_handling statements
+END;
+/
+
+
+
+
+
+CREATE OR REPLACE TRIGGER user_status_trig
+BEFORE INSERT ON user_details
+FOR EACH ROW
+
+BEGIN
+    if lower(:new.user_status) not in ('active', 'deactivated') then
+        raise_application_error(-20000, 'Please enter a valid user_status - active or deactivated ');
+    end if;
+--EXCEPTION
+    --exception_handling statements
+END;
+/
 
 
 --(3) MASKING: 
@@ -1370,6 +1575,7 @@ as select user_id, transaction_type, usage, destination_number, date_time from t
 
 
 select * from User_transaction_history where user_id=10006; 
+--select * from user_plans where user_id=10006
 
 
 --7th VIEW : plan_end_date : This view will give the plan's end date for a particular user
@@ -1530,6 +1736,42 @@ EXCEPTION
 END;
 
 
+
+
+
+
+
+#####################################
+
+select * from transactions;
+select * from available_plans;
+select * from user_plans order by user_id
+
+select user_id, usage from transactions where transaction_type='SMS' order by user_id
+
+
+--plan balance not done
+
+select u.user_id, u.plan_id, 
+count(t.usage)
+from transactions t inner join user_plans u
+on u.user_id=t.user_id
+inner join available_plans a
+on a.plan_id=u.plan_id
+where t.transaction_type='SMS'
+and a.plan_id=u.plan_id
+group by u.user_id, u.plan_id
+order by user_id;
+
+
+
+
+--transactions based on a certain plan
+
+select * from transactions order by user_id
+
+select * from transactions where user_id=10010
+select * from user_plans where user_id=10010
 
 
 
