@@ -6,7 +6,7 @@
 select * from available_plans;
 select * from department;
 select * from employee_details;
-select * from services;
+select * from service_transactions;
 select * from user_details;
 select * from user_plans;
 select * from payments;
@@ -240,7 +240,7 @@ CREATE SEQUENCE empid_seq       -- creating sequences for employee_details table
 
  
 
-CREATE SEQUENCE transaction_seq         -- creating sequences for transactions table 
+CREATE SEQUENCE service_transactions_seq         -- creating sequences for transactions table 
 
   MINVALUE 1 
 
@@ -407,13 +407,13 @@ plan_id number references available_plans(plan_id)
 
  
 
-create table services( 
+create table service_transactions( 
 
-service_id number primary key, 
+service_transaction_id number primary key, 
 
 user_id number references user_details(user_id), 
 
-service_type varchar2(20) not null, 
+service_transaction_type varchar2(20) not null, 
 
 date_time timestamp not null, 
 
@@ -443,6 +443,7 @@ create or replace procedure users_insert
 (p_user_id IN USER_DETAILS.USER_ID%TYPE, 
 
 p_emp_id IN USER_DETAILS.EMP_ID%TYPE, 
+
 p_user_fname IN USER_DETAILS.USER_FIRST_NAME%TYPE, 
 
 p_user_lname IN USER_DETAILS.USER_LAST_NAME%TYPE, 
@@ -651,25 +652,25 @@ END;
 
 
 
-create or replace procedure service_insert 
+create or replace procedure service_transactions_insert 
 
-(pt_id IN SERVICES.SERVICE_ID%TYPE, 
+(pt_id IN SERVICE_TRANSACTIONS.SERVICE_TRANSACTIONS_ID%TYPE, 
 
-puser_id IN SERVICES.USER_ID%TYPE, 
+puser_id IN SERVICE_TRANSACTIONS.USER_ID%TYPE, 
 
-ptype IN SERVICES.SERVICE_TYPE%TYPE, 
+ptype IN SERVICE_TRANSACTIONS.SERVICE_TRANSACTIONS_TYPE%TYPE, 
 
-p_tdate IN SERVICES.DATE_TIME%TYPE,
+p_tdate IN SERVICE_TRANSACTIONS.DATE_TIME%TYPE,
 
-pusage IN SERVICES.USAGE%TYPE, 
+pusage IN SERVICE_TRANSACTIONS.USAGE%TYPE, 
 
-pdest IN SERVICES.DESTINATION_NUMBER%TYPE) 
+pdest IN SERVICE_TRANSACTIONS.DESTINATION_NUMBER%TYPE) 
 
 IS 
 
 BEGIN 
 
-INSERT INTO  services VALUES (pt_id,puser_id,ptype,p_tdate,pusage,pdest); 
+INSERT INTO  service_transactions VALUES (pt_id,puser_id,ptype,p_tdate,pusage,pdest); 
 
 DBMS_OUTPUT.PUT_LINE('Transaction added.'); 
 
@@ -888,13 +889,13 @@ RETURN VARCHAR2
 IS 
     popular_service_type VARCHAR2(20);
 BEGIN
-    SELECT service_type INTO popular_service_type FROM (
-        SELECT s.service_type ,
-        COUNT(s.service_id) AS Service_Used_Count 
-        FROM user_details u join services s 
+    SELECT service_transactions_type INTO popular_service_type FROM (
+        SELECT s.service_transactions_type ,
+        COUNT(s.service_transactions_id) AS Service_Used_Count 
+        FROM user_details u join service_transactions s 
         ON u.user_id = s.user_id 
         WHERE LOWER(u.USER_STATE) = LOWER(p_region) 
-        GROUP BY s.service_type 
+        GROUP BY s.service_transactions_type 
         ORDER BY Service_Used_Count DESC )popular_service_region_wise
         WHERE ROWNUM=1;
     RETURN popular_service_type;
@@ -1030,16 +1031,16 @@ END;
 / 
 
 
-CREATE OR REPLACE TRIGGER service_type
-BEFORE INSERT ON services
+CREATE OR REPLACE TRIGGER service_transactions_type
+BEFORE INSERT ON service_transactions
 FOR EACH ROW
 
 --[WHEN condition]
 --DECLARE
 --    declaration statements
 BEGIN
-    if lower(:new.service_type) not in ('sms', 'call', 'data') then
-        raise_application_error(-20000, 'Please enter a valid service_type - call, sms, or data ');
+    if lower(:new.service_transactions_type) not in ('sms', 'call', 'data') then
+        raise_application_error(-20000, 'Please enter a valid service_transactions_type - call, sms, or data ');
     end if;
 --EXCEPTION
     --exception_handling statements
@@ -1049,13 +1050,13 @@ END;
 
 
 CREATE OR REPLACE TRIGGER sms_usage
-BEFORE INSERT ON services
+BEFORE INSERT ON service_transactions
 FOR EACH ROW
 
-WHEN (lower(new.service_type)='sms')
+WHEN (lower(new.service_transactions_type)='sms')
 BEGIN
     if (:new.usage) != 1 then
-        raise_application_error(-20000, 'Usage should always be 1 when the service_type is SMS');
+        raise_application_error(-20000, 'Usage should always be 1 when the service_transactions_type is SMS');
     end if;
 --EXCEPTION
     --exception_handling statements
@@ -1066,13 +1067,13 @@ END;
 
 
 CREATE OR REPLACE TRIGGER dest_num
-BEFORE INSERT ON services
+BEFORE INSERT ON service_transactions
 FOR EACH ROW
 
-WHEN (lower(new.service_type)='data')
+WHEN (lower(new.service_transactions_type)='data')
 BEGIN
     if (:new.destination_number) is not null then
-        raise_application_error(-20000, 'Destination_number should always be NULL when the service_type is data');
+        raise_application_error(-20000, 'Destination_number should always be NULL when the service_transactions_type is data');
     end if;
 --EXCEPTION
     --exception_handling statements
@@ -1217,9 +1218,10 @@ create index user_details_index on user_details ( user_id,emp_id,user_state );
 
 create index employee_details_index on employee_details ( emp_id,dept_id );
 
-create index services_index on services(user_id,plan_id)
+create index service_transactions_index on service_transactions(user_id,plan_id)
  
 --Inserting the data into USERS Table: 
+--check the below code
 
 execute users_insert(userid_seq.NEXTVAL,50002, 'elizabeth', 'rachel', '56 victoria street', 'hurley', 'mississippi', '02178', 'SSN',799400669,9635383643, 1.45, 'active');  
 
@@ -1334,6 +1336,8 @@ execute userplans_insert(10016,	10, TIMESTAMP '2022-09-17 14:16:02', 1);
 execute userplans_insert(10008,	6, TIMESTAMP '2022-09-21 15:08:25', 5); 
 
 execute userplans_insert(10015,	3, TIMESTAMP '2022-10-11 16:26:00', 4); 
+
+--check below
 
 execute userplans_insert(10011,	8, TIMESTAMP '2022-10-15 17:23:16', 3); 
 
@@ -1490,190 +1494,190 @@ commit;
 --Inserting the data into Transactions Table: 
 
 
-execute service_insert(transaction_seq.NEXTVAL,10002,'SMS',TIMESTAMP '2022-05-27 10:07:10',1,9875632100); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10002,'SMS',TIMESTAMP '2022-05-27 10:07:10',1,9875632100); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10002,'Call',TIMESTAMP '2022-05-27 20:21:05',10,876345901); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10002,'Call',TIMESTAMP '2022-05-27 20:21:05',10,876345901); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10002,'data',TIMESTAMP '2022-05-27 20:25:43',100,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10002,'data',TIMESTAMP '2022-05-27 20:25:43',100,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10003,'SMS',TIMESTAMP '2022-03-21 20:22:10',1,8793456279); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10003,'SMS',TIMESTAMP '2022-03-21 20:22:10',1,8793456279); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10003,'Call',TIMESTAMP '2022-03-22 12:06:05',30,9873648528); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10003,'Call',TIMESTAMP '2022-03-22 12:06:05',30,9873648528); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10003,'data',TIMESTAMP '2022-03-24 10:22:10',20,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10003,'data',TIMESTAMP '2022-03-24 10:22:10',20,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10010,'SMS',TIMESTAMP '2022-02-13 15:01:06',1,8736368491); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10010,'SMS',TIMESTAMP '2022-02-13 15:01:06',1,8736368491); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10015,'data',TIMESTAMP '2022-10-24 15:20:00',8,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10015,'data',TIMESTAMP '2022-10-24 15:20:00',8,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10004,'SMS',TIMESTAMP '2022-04-28 20:00:00',1,7859768013); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10004,'SMS',TIMESTAMP '2022-04-28 20:00:00',1,7859768013); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10010,'data',TIMESTAMP '2022-05-11 14:07:10',300,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10010,'data',TIMESTAMP '2022-05-11 14:07:10',300,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10013,'SMS',TIMESTAMP '2022-08-06 11:10:12',1,9856489032); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10013,'SMS',TIMESTAMP '2022-08-06 11:10:12',1,9856489032); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10003,'data',TIMESTAMP '2022-04-12 19:20:02',20,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10003,'data',TIMESTAMP '2022-04-12 19:20:02',20,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10001,'SMS',TIMESTAMP '2022-04-26 10:11:12',1,8378769981); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10001,'SMS',TIMESTAMP '2022-04-26 10:11:12',1,8378769981); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10001,'data',TIMESTAMP '2022-05-15 09:25:22',45,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10001,'data',TIMESTAMP '2022-05-15 09:25:22',45,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10012,'SMS',TIMESTAMP '2022-07-07 15:20:10',1,9564389989); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10012,'SMS',TIMESTAMP '2022-07-07 15:20:10',1,9564389989); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10017,'data',TIMESTAMP '2022-11-20 07:28:30',67,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10017,'data',TIMESTAMP '2022-11-20 07:28:30',67,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10018,'data',TIMESTAMP '2022-11-18 22:28:10',300,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10018,'data',TIMESTAMP '2022-11-18 22:28:10',300,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10011,'SMS',TIMESTAMP '2022-01-12 18:22:11',1,8861780690); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10011,'SMS',TIMESTAMP '2022-01-12 18:22:11',1,8861780690); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10011,'Call',TIMESTAMP '2022-01-12 20:05:20',10,9978997883); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10011,'Call',TIMESTAMP '2022-01-12 20:05:20',10,9978997883); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10011,'data',TIMESTAMP '2022-01-12 20:20:11',20,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10011,'data',TIMESTAMP '2022-01-12 20:20:11',20,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10006,'SMS',TIMESTAMP '2022-09-23 12:23:20',1,9247668933); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10006,'SMS',TIMESTAMP '2022-09-23 12:23:20',1,9247668933); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10016,'Call',TIMESTAMP '2022-09-18 20:04:10',15,8864907456); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10016,'Call',TIMESTAMP '2022-09-18 20:04:10',15,8864907456); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10016,'data',TIMESTAMP '2022-09-20 23:10:00',400,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10016,'data',TIMESTAMP '2022-09-20 23:10:00',400,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10007,'SMS',TIMESTAMP '2022-09-23 12:23:20',1,8765439088); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10007,'SMS',TIMESTAMP '2022-09-23 12:23:20',1,8765439088); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10007,'data',TIMESTAMP '2022-10-06 20:10:00',4,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10007,'data',TIMESTAMP '2022-10-06 20:10:00',4,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10006,'SMS',TIMESTAMP '2022-07-17 03:20:10',1,9987664597); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10006,'SMS',TIMESTAMP '2022-07-17 03:20:10',1,9987664597); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10006,'data',TIMESTAMP '2022-09-29 08:11:08',60,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10006,'data',TIMESTAMP '2022-09-29 08:11:08',60,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10019,'SMS',TIMESTAMP '2022-11-10 17:22:11',1,9876453214); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10019,'SMS',TIMESTAMP '2022-11-10 17:22:11',1,9876453214); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10019,'data',TIMESTAMP '2022-11-12 19:10:00',500,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10019,'data',TIMESTAMP '2022-11-12 19:10:00',500,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10014,'SMS',TIMESTAMP '2022-03-12 22:22:11',1,8976787894); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10014,'SMS',TIMESTAMP '2022-03-12 22:22:11',1,8976787894); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10009,'data',TIMESTAMP '2022-08-15 20:16:08',50,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10009,'data',TIMESTAMP '2022-08-15 20:16:08',50,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10000,'SMS',TIMESTAMP '2021-12-23 23:12:09',1,8578642237); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10000,'SMS',TIMESTAMP '2021-12-23 23:12:09',1,8578642237); 
 
 commit; 
 
 
 --newly added
 
-execute service_insert(transaction_seq.NEXTVAL,10014,'data',TIMESTAMP '2022-09-10 12:32:21',23.64,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10014,'data',TIMESTAMP '2022-09-10 12:32:21',23.64,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10014,'SMS',TIMESTAMP '2021-10-30 14:43:42',1,8578642237); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10014,'SMS',TIMESTAMP '2021-10-30 14:43:42',1,8578642237); 
 
 commit;
 
-execute service_insert(transaction_seq.NEXTVAL,10011,'SMS',TIMESTAMP '2022-02-10 12:32:21',1,7327452755); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10011,'SMS',TIMESTAMP '2022-02-10 12:32:21',1,7327452755); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10011,'call',TIMESTAMP '2022-04-11 20:53:32',89,3427455527); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10011,'call',TIMESTAMP '2022-04-11 20:53:32',89,3427455527); 
 
 commit;
 
-execute service_insert(transaction_seq.NEXTVAL,10011,'call',TIMESTAMP '2022-04-11 20:56:55',120,3427455527); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10011,'call',TIMESTAMP '2022-04-11 20:56:55',120,3427455527); 
 
 commit;
 
-execute service_insert(transaction_seq.NEXTVAL,10001,'data',TIMESTAMP '2022-11-29 10:32:42',32.54,9835384427); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10001,'data',TIMESTAMP '2022-11-29 10:32:42',32.54,9835384427); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10010,'Call',TIMESTAMP '2022-07-07 12:13:00',235,5262899360); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10010,'Call',TIMESTAMP '2022-07-07 12:13:00',235,5262899360); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10010,'data',TIMESTAMP '2022-08-03 03:31:54',12.53,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10010,'data',TIMESTAMP '2022-08-03 03:31:54',12.53,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10010,'SMS',TIMESTAMP '2022-10-01 23:12:54',1,5628993001); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10010,'SMS',TIMESTAMP '2022-10-01 23:12:54',1,5628993001); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10007,'Call',TIMESTAMP '2022-12-03 01:32:43',63,8946382561); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10007,'Call',TIMESTAMP '2022-12-03 01:32:43',63,8946382561); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10008,'data',TIMESTAMP '2022-10-01 21:31:43',32.54,NULL); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10008,'data',TIMESTAMP '2022-10-01 21:31:43',32.54,NULL); 
 
 commit; 
 
-execute service_insert(transaction_seq.NEXTVAL,10008,'SMS',TIMESTAMP '2022-11-05 15:43:54',1,8358368243); 
+execute service_transactions_insert(transaction_seq.NEXTVAL,10008,'SMS',TIMESTAMP '2022-11-05 15:43:54',1,8358368243); 
 
 commit; 
 
 
 --------------------
---execute service_insert(transaction_seq.NEXTVAL,10000,'test',TIMESTAMP '2021-12-23 23:12:09',1,8578642237); 
---execute service_insert(transaction_seq.NEXTVAL,10008,'sms',TIMESTAMP '2022-11-05 15:43:54',2,8358368243); 
---execute service_insert(transaction_seq.NEXTVAL,10008,'data',TIMESTAMP '2022-11-05 15:43:54',2,8358368243); 
+--execute service_transactions_insert(transaction_seq.NEXTVAL,10000,'test',TIMESTAMP '2021-12-23 23:12:09',1,8578642237); 
+--execute service_transactions_insert(transaction_seq.NEXTVAL,10008,'sms',TIMESTAMP '2022-11-05 15:43:54',2,8358368243); 
+--execute service_transactions_insert(transaction_seq.NEXTVAL,10008,'data',TIMESTAMP '2022-11-05 15:43:54',2,8358368243); 
 
 
 
